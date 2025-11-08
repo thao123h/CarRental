@@ -38,7 +38,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.VH> {
         ItemDTO car = list.get(position);
         holder.tvCarName.setText(car.getName());
         holder.tvCarLocation.setText(car.getAddress());
-        holder.tvCarPrice.setText((int) car.getPrice());
+        holder.tvCarPrice.setText(String.format("%,.0fđ/ngày", car.getPrice()));
+
 
         Glide.with(ctx)
                 .load(car.getItemImages().get(0).getImageUrl())
