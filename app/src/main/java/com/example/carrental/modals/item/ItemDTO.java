@@ -35,7 +35,7 @@ public class ItemDTO {
         return name;
     }
 
-    public Double getPrice() {
+    public double getPrice() {
         return price;
     }
 

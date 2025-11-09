@@ -2,22 +2,56 @@ package com.example.carrental.modals.item;
 
 import com.example.carrental.modals.enums.FuelType;
 import com.example.carrental.modals.enums.Transmission;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
 public class CarDTO {
+
+    // ✅ Constructor mặc định cho Gson
+    public CarDTO() {}
+
+    // ✅ Các trường với @SerializedName để ánh xạ JSON chính xác
+    @SerializedName("id")
     private Long id;
+
+    @SerializedName("brand")
     private String brand;
+
+    @SerializedName("model")
     private String model;
+
+    @SerializedName("year")
     private Integer year;
+
+    @SerializedName("transmission")
     private Transmission transmission;
 
-    public String getModel() {
-        return model;
+    @SerializedName("fuelType")
+    private FuelType fuelType;
+
+    @SerializedName("seats")
+    private Integer seats;
+
+    @SerializedName("licensePlate")
+    private String licensePlate;
+
+    @SerializedName("kms")
+    private Integer kms;
+
+    @SerializedName("item")
+    private ItemDTO item;
+
+    @SerializedName("itemImages")
+    private List<ItemImageDTO> itemImages;
+
+    // ✅ Getter & Setter
+    public Long getId() {
+        return id;
     }
 
-    public void setModel(String model) {
-        this.model = model;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getBrand() {
@@ -26,6 +60,14 @@ public class CarDTO {
 
     public void setBrand(String brand) {
         this.brand = brand;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
     }
 
     public Integer getYear() {
@@ -44,20 +86,20 @@ public class CarDTO {
         this.transmission = transmission;
     }
 
-    public Integer getSeats() {
-        return seats;
-    }
-
-    public void setSeats(Integer seats) {
-        this.seats = seats;
-    }
-
     public FuelType getFuelType() {
         return fuelType;
     }
 
     public void setFuelType(FuelType fuelType) {
         this.fuelType = fuelType;
+    }
+
+    public Integer getSeats() {
+        return seats;
+    }
+
+    public void setSeats(Integer seats) {
+        this.seats = seats;
     }
 
     public String getLicensePlate() {
@@ -91,33 +133,4 @@ public class CarDTO {
     public void setItemImages(List<ItemImageDTO> itemImages) {
         this.itemImages = itemImages;
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public CarDTO(Long id, String brand, String model, Integer year, Transmission transmission, FuelType fuelType, Integer seats, String licensePlate, Integer kms, ItemDTO item, List<ItemImageDTO> itemImages) {
-        this.id = id;
-        this.brand = brand;
-        this.model = model;
-        this.year = year;
-        this.transmission = transmission;
-        this.fuelType = fuelType;
-        this.seats = seats;
-        this.licensePlate = licensePlate;
-        this.kms = kms;
-        this.item = item;
-        this.itemImages = itemImages;
-    }
-
-    private FuelType fuelType;
-    private Integer seats;
-    private String licensePlate;
-    private Integer kms;
-    private ItemDTO item;
-    private List<ItemImageDTO> itemImages;
 }

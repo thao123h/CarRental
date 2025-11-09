@@ -17,7 +17,7 @@ import retrofit2.http.Query;
 
 public interface ItemService {
     //  Lấy tất cả items theo Category
-    @GET("items/")
+    @GET("items")
     Call<BaseResponse<List<ItemDTO>>> getAllByCategory(@Query("category") Category category);
 
     // Lấy chi tiết 1 item theo id
@@ -42,6 +42,7 @@ public interface ItemService {
     @POST("cars")
     Call<BaseResponse<ItemDTO>> createCar(@Body CarDTO carDTO);
 
-
+    @GET("items/cars")
+    Call<BaseResponse<List<CarDTO>>> getAllCars();
 
 }
