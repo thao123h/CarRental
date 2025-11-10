@@ -18,7 +18,7 @@ public class AuthInterceptor implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
 //        TokenManager tokenManager = new TokenManager(context);
 //        String token = tokenManager.getToken(); // luôn lấy token mới nhất
-        String token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0aGFvIiwianRpIjoiMGJiYzRlMGYtNmZhMC00YWFjLWFiZTYtOGY1OGEyOWM2NzBmIiwiaWQiOjE1LCJ0b2tlblZlcnNpb24iOjAsInJvbGVzIjpbIlJFTlRFUiJdLCJpYXQiOjE3NjI1ODU5NTYsImV4cCI6MTc2MjU4NjAxNn0.PkXErplOs_e5qQjVPJ4RPYMv3Ek9iPnTFVtjXOKOCCw";
+        String token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0aGFvb29vIiwianRpIjoiZTcxOTdlNDMtZjc5Ni00ZDNhLWI0ODMtZWZmNzIwZjA0YzVkIiwiaWQiOjE3LCJ0b2tlblZlcnNpb24iOjAsInJvbGVzIjpbIlJFTlRFUiJdLCJpYXQiOjE3NjI3ODcyNDAsImV4cCI6MTc2Mjc4NzMwMH0.t3dnOr5p6y1ZwZuZDRoc-HMSO3NkYmNz1YBl2EcuOmE";
         Request original = chain.request();
         Request.Builder builder = original.newBuilder();
 
