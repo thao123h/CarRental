@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    tools:context=".LoginActivity"> <View
+    tools:context=".activities.LoginActivity">
+
+    <View
     android:id="@+id/statusBarPlaceholder"
     android:layout_width="match_parent"
     android:layout_height="24dp"
@@ -27,33 +29,34 @@
         app:layout_constraintTop_toBottomOf="@+id/statusBarPlaceholder" />
 
     <TextView
-        android:id="@+id/tvPhoneLabel"
+        android:id="@+id/tvEmailLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="40dp"
-        android:text="Số điện thoại của bạn"
+        android:text="Email của bạn"
         android:textColor="@android:color/black"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvLoginHeader" />
 
     <EditText
-        android:id="@+id/etPhoneNumber"
+        android:id="@+id/etEmail"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/rounded_edittext_bg"
-        android:hint="Nhập số điện thoại"
-        android:inputType="phone"
+        android:hint="Nhập email"
+        android:inputType="textEmailAddress"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvPhoneLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/tvEmailLabel" />
+
 
     <TextView
         android:id="@+id/tvPasswordLabel"
@@ -65,7 +68,7 @@
         android:textColor="@android:color/black"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etPhoneNumber" />
+        app:layout_constraintTop_toBottomOf="@+id/etEmail" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilPassword"

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8F9FA"
+    android:orientation="vertical"
+    tools:context=".activities.ProfileActivity">
+
+    <!-- 1. Thanh Header (Toolbar) -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_close"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/gray_dark" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tài khoản"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivShare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_share"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/gray_dark" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Card thông tin chính -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Thông tin User trên cùng -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/ivAvatar"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:background="@drawable/shape_avatar_background"
+                    android:padding="4dp"
+                    android:src="@drawable/ic_avatar_placeholder"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="Đang tải..."
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@id/ivAvatar"
+                    app:layout_constraintTop_toTopOf="@id/ivAvatar" />
+
+                <TextView
+                    android:id="@+id/tvJoinDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="Ngày tham gia"
+                    android:textColor="@color/gray_medium"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="@id/ivAvatar"
+                    app:layout_constraintStart_toEndOf="@id/ivAvatar" />
+
+                <TextView
+                    android:id="@+id/tvJoinDateValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="08/10/2025"
+                    android:textColor="@color/gray_medium"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="@id/ivAvatar"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <ImageView
+                    android:id="@+id/ivEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_edit"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/gray_dark" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Vạch kẻ -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#F0F0F0" />
+
+            <!-- Danh sách các mục -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="16dp">
+
+                <!-- Mục 1: Giấy phép lái xe -->
+                <include
+                    android:id="@+id/itemLicense"
+                    layout="@layout/item_profile_row" />
+
+                <!-- Mục 2: Số điện thoại -->
+                <include
+                    android:id="@+id/itemPhone"
+                    layout="@layout/item_profile_row" />
+
+                <!-- Mục 3: Email -->
+                <include
+                    android:id="@+id/itemEmail"
+                    layout="@layout/item_profile_row" />
+
+                <!-- Mục 4: Facebook -->
+                <include
+                    android:id="@+id/itemFacebook"
+                    layout="@layout/item_profile_row" />
+
+                <!-- Mục 5: Google -->
+                <include
+                    android:id="@+id/itemGoogle"
+                    layout="@layout/item_profile_row" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <!-- Nút Đăng xuất (Thêm vào) -->
+    <Button
+        android:id="@+id/btnLogout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:background="@drawable/shape_rounded_button_red"
+        android:text="Đăng xuất"
+        android:textColor="@color/white" />
+
+</LinearLayout>

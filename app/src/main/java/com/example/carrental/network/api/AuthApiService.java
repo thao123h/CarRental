@@ -20,39 +20,39 @@ import retrofit2.http.Path;
 
 public interface AuthApiService {
     // Lấy thông tin người dùng hiện tại (đã đăng nhập)
-    @GET("users/me")
+    @GET("auth/users/me")
     Call<BaseResponse<UserDTO>> getMe();
 
     // Lấy thông tin người dùng theo ID
-    @GET("users/{id}")
+    @GET("auth/users/{id}")
     Call<BaseResponse<UserDTO>> getUserById(@Path("id") Long id);
 
     // Cập nhật thông tin người dùng hiện tại
-    @PATCH("users/me")
+    @PATCH("auth/users/me")
     Call<BaseResponse<UserDTO>> updateMe(@Body UserDTO userDTO);
 
     // Đăng nhập (xác thực user, trả JWT token)
-    @POST("signin")
+    @POST("auth/signin")
     Call<BaseResponse<JwtResponse>> authenticateUser(@Body LoginRequest loginRequest);
 
     // Đăng ký tài khoản mới
-    @POST("signup")
+    @POST("auth/signup")
     Call<BaseResponse<MessageResponse>> registerUser(@Body SignupRequest signUpRequest);
 
     // Refresh Token sau khi thêm Role
-    @POST("refresh-role")
+    @POST("auth/refresh-role")
     Call<BaseResponse<JwtResponse>> refreshRole(@Body RoleUpdateRequest roleUpdateRequest);
 
     // Đăng xuất (xóa refresh token và blacklist access token)
-    @POST("logoutone")
+    @POST("auth/logoutone")
     Call<BaseResponse<Object>> logout(@Body RefreshTokenRequest refreshTokenRequest);
 
     // Làm mới Access Token bằng Refresh Token
-    @POST("refresh")
+    @POST("auth/refresh")
     Call<BaseResponse<JwtResponse>> refresh(@Body RefreshTokenRequest refreshTokenRequest);
 
     // Kiểm tra Email tồn tại
     @FormUrlEncoded
-    @POST("check-exists")
+    @POST("auth/check-exists")
     Call<BaseResponse<Boolean>> checkEmailExists(@Field("email") String email);
 }
