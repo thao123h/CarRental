@@ -2,6 +2,7 @@ package com.example.carrental.activities;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
@@ -42,6 +43,7 @@ public class ItemDetailActivity extends AppCompatActivity {
     private Calendar startDate, endDate;
     private double pricePerDay = 0.0;
     private List<ScheduleDTO> scheduleList = new ArrayList<>();
+    private ItemDTO item = null;
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
     private final DecimalFormat moneyFormat = new DecimalFormat("#,###");
@@ -86,7 +88,7 @@ public class ItemDetailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<BaseResponse<ItemDTO>> call, Response<BaseResponse<ItemDTO>> response) {
                 if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
-                    ItemDTO item = response.body().getData();
+                    item = response.body().getData();
                     bindData(item);
                 } else {
                     Toast.makeText(ItemDetailActivity.this, "No data found", Toast.LENGTH_SHORT).show();
@@ -220,7 +222,24 @@ public class ItemDetailActivity extends AppCompatActivity {
                 Toast.makeText(this, "Please select both start and end dates", Toast.LENGTH_SHORT).show();
                 return;
             }
-            Toast.makeText(this, "Booking confirmed!", Toast.LENGTH_SHORT).show();
+
+            String startDateStr = dateFormat.format(startDate.getTime());
+            String endDateStr = dateFormat.format(endDate.getTime());
+            String totalPrice = tvEstimatedTotal.getText().toString();
+            // Tạo Intent gửi sang BookingDetailsActivity
+            Intent intent = new Intent(ItemDetailActivity.this, BookingDetailsActivity.class);
+            intent.putExtra("car_id", item.getId());
+            intent.putExtra("car_name", item.getName());
+            intent.putExtra("address", item.getAddress());
+            intent.putExtra("start_date", startDateStr );
+            intent.putExtra("end_date", endDateStr);
+            intent.putExtra("total_price", totalPrice);
+
+            if (item.getItemImages().get(0).getImageUrl() != null) {
+                intent.putExtra("car_image_url", item.getItemImages().get(0).getImageUrl() );
+            }
+
+            startActivity(intent);
         });
     }
 }
