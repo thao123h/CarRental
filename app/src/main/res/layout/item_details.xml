@@ -163,14 +163,6 @@
                         android:layout_marginTop="8dp"
                         android:text="Location: Hanoi, Vietnam"
                         android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/tv_category"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:text="Category: Sedan"
-                        android:textSize="14sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 

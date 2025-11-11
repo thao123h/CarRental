@@ -74,7 +74,7 @@ public class ItemDetailActivity extends AppCompatActivity {
         tvDescription = findViewById(R.id.tv_description);
         imgItem = findViewById(R.id.img_item);
         tvAddress = findViewById(R.id.tv_address);
-        tvCategory = findViewById(R.id.tv_category);
+
         tvTotalDays = findViewById(R.id.tv_total_days);
         tvEstimatedTotal = findViewById(R.id.tv_estimated_total);
         btnStartDate = findViewById(R.id.btn_start_date);
@@ -105,8 +105,7 @@ public class ItemDetailActivity extends AppCompatActivity {
         tvPrice.setText( String.format("%,.0fđ/ngày",item.getPrice()));
         tvDeposit.setText( String.format("%,.0fđ", item.getDepositAmount()));
         tvDescription.setText(item.getDescription());
-        tvAddress.setText("Location: " + item.getAddress());
-        tvCategory.setText("Category: " + item.getCategory());
+        tvAddress.setText("Địa điểm " + item.getAddress());
         pricePerDay = item.getPrice();
         if (item.getItemImages() != null && !item.getItemImages().isEmpty()) {
             Glide.with(this)
