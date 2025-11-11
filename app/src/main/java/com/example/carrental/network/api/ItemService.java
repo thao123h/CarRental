@@ -14,6 +14,7 @@ import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.DELETE;
 
 public interface ItemService {
     //  Lấy tất cả items theo Category
@@ -41,6 +42,17 @@ public interface ItemService {
     //  Tạo mới một xe ô tô
     @POST("items/cars") // Endpoint có thể là "items" hoặc "items/cars", bạn cần chắc chắn với backend
     Call<BaseResponse<ItemDTO>> createCar(@Body ItemDTO item); // ✅ ĐÃ SỬA: Tham số là ItemDTO
+
+    //  Cập nhật thông tin xe ô tô
+    @PATCH("items/cars/{id}")
+    Call<BaseResponse<ItemDTO>> updateCar(
+            @Path("id") Long id,
+            @Body ItemDTO item // ✅ ĐÃ SỬA: Tham số là ItemDTO
+    );
+
+    // Xóa một item theo id
+    @DELETE("items/{id}")
+    Call<Void> deleteItem(@Path("id") Long id);
 
     @GET("items/cars")
     Call<BaseResponse<List<CarDTO>>> getAllCars();
