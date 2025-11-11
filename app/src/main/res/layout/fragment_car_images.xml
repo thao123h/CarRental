@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_images_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            android:padding="12dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ảnh xe"
+                    android:textSize="16sp"
+                    android:textColor="@color/text_primary"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_marginTop="8dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Vui lòng đăng ít nhất 4 ảnh (Trước - sau - trái - phải) để tăng hiệu quả cho thuê"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="13sp"/>
+
+                <!-- Big main image (slot 0) -->
+                <ImageView
+                    android:id="@+id/iv_main"
+                    android:layout_marginTop="12dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp"
+                    android:background="@drawable/rounded_card"
+                    android:src="@android:drawable/ic_menu_camera"
+                    android:scaleType="center"
+                    android:tint="@color/light_grey"/>
+
+                <!-- 2x2 grid (slots 1..4) -->
+                <GridLayout
+                    android:layout_marginTop="12dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:columnCount="2"
+                    android:rowCount="2"
+                    android:alignmentMode="alignMargins"
+                    android:columnOrderPreserved="false"
+                    android:rowOrderPreserved="false"
+                    android:useDefaultMargins="true">
+
+                    <ImageView
+                        android:id="@+id/iv_slot_1"
+                        android:layout_width="0dp"
+                        android:layout_height="96dp"
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        android:background="@drawable/rounded_card"
+                        android:src="@android:drawable/ic_menu_camera"
+                        android:scaleType="center"
+                        android:tint="@color/light_grey"/>
+
+                    <ImageView
+                        android:id="@+id/iv_slot_2"
+                        android:layout_width="0dp"
+                        android:layout_height="96dp"
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        android:background="@drawable/rounded_card"
+                        android:src="@android:drawable/ic_menu_camera"
+                        android:scaleType="center"
+                        android:tint="@color/light_grey"/>
+
+                    <ImageView
+                        android:id="@+id/iv_slot_3"
+                        android:layout_width="0dp"
+                        android:layout_height="96dp"
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        android:background="@drawable/rounded_card"
+                        android:src="@android:drawable/ic_menu_camera"
+                        android:scaleType="center"
+                        android:tint="@color/light_grey"/>
+
+                    <ImageView
+                        android:id="@+id/iv_slot_4"
+                        android:layout_width="0dp"
+                        android:layout_height="96dp"
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        android:background="@drawable/rounded_card"
+                        android:src="@android:drawable/ic_menu_camera"
+                        android:scaleType="center"
+                        android:tint="@color/light_grey"/>
+                </GridLayout>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <View android:layout_width="match_parent" android:layout_height="24dp"/>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
