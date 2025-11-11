@@ -39,8 +39,8 @@ public interface ItemService {
 
 
     //  Tạo mới một xe ô tô
-    @POST("items/cars")
-    Call<BaseResponse<ItemDTO>> createCar(@Body CarDTO carDTO);
+    @POST("items/cars") // Endpoint có thể là "items" hoặc "items/cars", bạn cần chắc chắn với backend
+    Call<BaseResponse<ItemDTO>> createCar(@Body ItemDTO item); // ✅ ĐÃ SỬA: Tham số là ItemDTO
 
     @GET("items/cars")
     Call<BaseResponse<List<CarDTO>>> getAllCars();
