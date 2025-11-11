@@ -15,8 +15,6 @@ public class LauncherActivity extends AppCompatActivity {
 
         if (tokenManager.getToken() != null) {
             startActivity(new Intent(this, ProfileActivity.class));
-        } else {
-            startActivity(new Intent(this, LoginActivity.class));
         }
         finish();
     }

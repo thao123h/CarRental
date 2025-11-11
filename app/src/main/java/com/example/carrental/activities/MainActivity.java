@@ -1,33 +1,48 @@
 package com.example.carrental.activities;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import com.example.carrental.R;
 import com.example.carrental.fragments.HomeFragment;
 import com.example.carrental.fragments.AccountFragment;
+import com.example.carrental.fragments.LoginFragment;
+import com.example.carrental.network.TokenManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigation;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         bottomNavigation = findViewById(R.id.bottom_navigation);
+        TokenManager tokenManager = new TokenManager(this);
 
+        if (tokenManager.isLoggedIn()) {
+            bottomNavigation.getMenu().findItem(R.id.nav_login).setTitle("Cá nhân");
+        } else {
+            bottomNavigation.getMenu().findItem(R.id.nav_login).setTitle("Đăng nhập");
+        }
+
+        // Thêm các fragment
         addFragment(new HomeFragment(), "HOME", true);
         addFragment(new AccountFragment(), "ACCOUNT", false);
+        addFragment(new LoginFragment(), "LOGIN", false);
 
         bottomNavigation.setOnItemSelectedListener(item -> {
             String tagToShow = null;
             if (item.getItemId() == R.id.nav_home) tagToShow = "HOME";
-            else if (item.getItemId() == R.id.nav_login) tagToShow = "ACCOUNT";
-
+            else if (item.getItemId() == R.id.nav_login && tokenManager.isLoggedIn()) tagToShow = "ACCOUNT";
+            else if (item.getItemId() == R.id.nav_login && !tokenManager.isLoggedIn()) tagToShow = "LOGIN";
             if (tagToShow != null) showFragment(tagToShow);
 
             return true;

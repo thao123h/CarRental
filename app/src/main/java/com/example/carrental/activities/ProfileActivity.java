@@ -153,8 +153,8 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void logout() {
 
-        tokenManager.clearToken();
-        Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
+        tokenManager.clearAll();
+        Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }

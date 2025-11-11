@@ -1,15 +1,19 @@
-package com.example.carrental.activities; // Thay bằng package của bạn
+package com.example.carrental.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
 
-// Import các class của bạn
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.example.carrental.R;
 import com.example.carrental.modals.BaseResponse;
 import com.example.carrental.modals.auth.MessageResponse;
@@ -21,7 +25,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SignupActivity extends AppCompatActivity {
+public class SignupFragment extends Fragment {
 
     private EditText etName, etEmail, etPassword, etConfirmPassword;
     private CheckBox cbAgree;
@@ -29,33 +33,40 @@ public class SignupActivity extends AppCompatActivity {
     private TextView tvSignIn;
     private AuthApiService apiService;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // Đặt layout mới
-        setContentView(R.layout.activity_signup);
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.activity_signup, container, false);
 
         // Khởi tạo ApiService
-        apiService = RetrofitClient.createService(this, AuthApiService.class);
+        apiService = RetrofitClient.createService(requireContext(), AuthApiService.class);
 
-        // Ánh xạ View từ layout mới
-        etName = findViewById(R.id.etName);
-        etEmail = findViewById(R.id.etEmail);
-        etPassword = findViewById(R.id.etPassword);
-        etConfirmPassword = findViewById(R.id.etConfirmPassword);
-        cbAgree = findViewById(R.id.cbAgree);
-        btnCreateAccount = findViewById(R.id.btnCreateAccount);
-        tvSignIn = findViewById(R.id.tvSignIn);
+        // Ánh xạ View
+        etName = view.findViewById(R.id.etName);
+        etEmail = view.findViewById(R.id.etEmail);
+        etPassword = view.findViewById(R.id.etPassword);
+        etConfirmPassword = view.findViewById(R.id.etConfirmPassword);
+        cbAgree = view.findViewById(R.id.cbAgree);
+        btnCreateAccount = view.findViewById(R.id.btnCreateAccount);
+        tvSignIn = view.findViewById(R.id.tvSignIn);
 
         // Xử lý sự kiện click Đăng ký
         btnCreateAccount.setOnClickListener(v -> validateAndSignup());
 
-        // Xử lý sự kiện click "Sign in"
+        // Xử lý sự kiện click "Sign in" -> chuyển sang LoginFragment
         tvSignIn.setOnClickListener(v -> {
-            // Quay lại màn hình Login
-            startActivity(new Intent(this, LoginActivity.class));
-            finish(); // Đóng màn hình này
+            LoginFragment loginFragment = new LoginFragment();
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, loginFragment)
+                    .addToBackStack(null) // có thể nhấn back quay lại Signup
+                    .commit();
         });
+
+        return view;
     }
 
     private void validateAndSignup() {
@@ -66,7 +77,7 @@ public class SignupActivity extends AppCompatActivity {
 
         // 1. Kiểm tra các trường trống
         if (name.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
-            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -78,46 +89,44 @@ public class SignupActivity extends AppCompatActivity {
 
         // 3. Kiểm tra checkbox điều khoản
         if (!cbAgree.isChecked()) {
-            Toast.makeText(this, "You must agree to the Terms and Privacy Policy", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "You must agree to the Terms and Privacy Policy", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Tất cả đều hợp lệ -> Gọi API
+        // Tất cả hợp lệ -> Gọi API
         performSignup(name, email, password);
     }
 
     private void performSignup(String name, String email, String password) {
-        // Dùng đúng model SignupRequest của bạn
         SignupRequest signupRequest = new SignupRequest(email, password, name);
 
-        // Giả sử API của bạn chạy ở /auth/signup (do có Gateway)
-        // Nếu không, hãy sửa lại trong RetrofitClient hoặc AuthApiService
         apiService.registerUser(signupRequest).enqueue(new Callback<BaseResponse<MessageResponse>>() {
             @Override
             public void onResponse(Call<BaseResponse<MessageResponse>> call, Response<BaseResponse<MessageResponse>> response) {
                 if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
-                    // Đăng ký thành công
-                    Toast.makeText(SignupActivity.this, "Account created! Please sign in.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Account created! Please sign in.", Toast.LENGTH_LONG).show();
 
-                    // Chuyển sang màn hình Login
-                    startActivity(new Intent(SignupActivity.this, LoginActivity.class));
-                    finishAffinity(); // Đóng màn hình này và các màn hình trước đó (nếu có)
+                    // Chuyển sang LoginFragment sau khi signup thành công
+                    LoginFragment loginFragment = new LoginFragment();
+                    requireActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragment_container, loginFragment)
+                            .commit();
+
                 } else {
-                    // Xử lý lỗi (ví dụ: email đã tồn tại)
                     String message = "Sign up failed";
                     if(response.body() != null && response.body().getMessage() != null) {
                         message = response.body().getMessage();
                     } else if (response.errorBody() != null) {
-                        message = "Error: " + response.code(); // Lỗi 4xx, 5xx
+                        message = "Error: " + response.code();
                     }
-                    Toast.makeText(SignupActivity.this, message, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<BaseResponse<MessageResponse>> call, Throwable t) {
-                // Lỗi mạng
-                Toast.makeText(SignupActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
