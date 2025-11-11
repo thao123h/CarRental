@@ -24,8 +24,10 @@
         android:usesCleartextTraffic="true"
         tools:ignore="ExtraText">
 
+
+        <!--        android:name=".activities.HomeActivity"-->
         <activity
-            android:name=".activities.HomeActivity"
+            android:name=".activities.CarListActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,9 +36,13 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".activities.CarListActivity"
-            android:exported="true" />
+<!--        <activity-->
+<!--            android:name=".activities.CarListActivity"-->
+<!--            android:exported="true" />-->
+
+                <activity
+                    android:name=".activities.AddCarActivity"
+                    android:exported="true" />
 
 
     </application>

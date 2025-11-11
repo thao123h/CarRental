@@ -16,6 +16,9 @@ import com.example.carrental.modals.item.CarDTO;
 import com.example.carrental.network.RetrofitClient;
 import com.example.carrental.network.api.ItemService;
 import com.google.gson.Gson;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import android.content.Intent;
+
 
 import java.util.List;
 
@@ -38,6 +41,13 @@ public class CarListActivity extends AppCompatActivity {
 
         Log.d("CarList", "onCreate gọi loadCarList()");
         loadCarList();
+
+        FloatingActionButton btnAdd = findViewById(R.id.btnAdd);
+        btnAdd.setOnClickListener(v -> {
+            Intent intent = new Intent(CarListActivity.this, AddCarActivity.class);
+            startActivity(intent);
+        });
+
     }
 
     private void loadCarList() {

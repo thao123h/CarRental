@@ -16,6 +16,9 @@ public class ItemImageDTO {
         return id;
     }
 
+    public ItemImageDTO() {
+    }
+
     public ItemImageDTO(Long id, String imageUrl, ImageType imageType) {
         this.id = id;
         this.imageUrl = imageUrl;
