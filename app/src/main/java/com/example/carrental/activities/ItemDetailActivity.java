@@ -74,7 +74,6 @@ public class ItemDetailActivity extends AppCompatActivity {
         tvDescription = findViewById(R.id.tv_description);
         imgItem = findViewById(R.id.img_item);
         tvAddress = findViewById(R.id.tv_address);
-
         tvTotalDays = findViewById(R.id.tv_total_days);
         tvEstimatedTotal = findViewById(R.id.tv_estimated_total);
         btnStartDate = findViewById(R.id.btn_start_date);

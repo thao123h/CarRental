@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.carrental.R;
-import com.example.carrental.activities.HomeActivity;
 import com.example.carrental.modals.item.ItemDTO;
 
 import java.util.List;
