@@ -5,6 +5,7 @@ import com.example.carrental.modals.enums.Category;
 import com.example.carrental.modals.item.CarDTO;
 import com.example.carrental.modals.item.ItemDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -24,14 +25,9 @@ public interface ItemService {
     @GET("items/{id}")
     Call<BaseResponse<ItemDTO>> getItemById(@Path("id") Long id);
 
-    // Lọc items theo địa chỉ, category và khoảng thời gian
-    @GET("items/filter")
-    Call<BaseResponse<List<ItemDTO>>> filterItems(
-            @Query("address") String address,
-            @Query("category") Category category,
-            @Query("startDate") String startDate,   // LocalDateTime → String ISO format
-            @Query("endDate") String endDate
-    );
+    // Lọc items theo địa chỉ
+//    @GET("/filter")
+//    Call<BaseResponse<List<ItemDTO>>> getAllItemsByAddress(@Query("address") String address);
 
     //  Lấy tất cả items của user hiện tại (người đang đăng nhập)
     @GET("items/me")

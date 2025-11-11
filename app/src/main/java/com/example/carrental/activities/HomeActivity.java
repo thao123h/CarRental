@@ -6,6 +6,10 @@ package com.example.carrental.activities;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +17,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -31,10 +37,12 @@ import retrofit2.Response;
 public class HomeActivity extends AppCompatActivity implements ItemAdapter.OnItemActionListener {
     private RecyclerView rv;
     private ItemAdapter adapter;
-    private List<ItemDTO> list = new ArrayList<>();
-    private ItemService api;
-    private SwipeRefreshLayout swipe;
 
+    private ItemService api;
+    EditText edtLocation;
+    private SwipeRefreshLayout swipe;
+    Button btnFind;
+    List<ItemDTO> items = new ArrayList<>();
     private static final int REQ_ADD = 1001;
     private static final int REQ_EDIT = 1002;
 
@@ -45,13 +53,38 @@ public class HomeActivity extends AppCompatActivity implements ItemAdapter.OnIte
         api = RetrofitClient.createService(this, ItemService.class);
         rv = findViewById(R.id.rvCars);
         swipe = findViewById(R.id.swipeRefresh);
-        adapter = new ItemAdapter(this, list, this);
+        btnFind = findViewById(R.id.btnFind);
+        edtLocation = findViewById(R.id.edtLocation);
+        adapter = new ItemAdapter(this, items, this);
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setAdapter(adapter);
 
         swipe.setOnRefreshListener(this::loadData);
-
+        edtLocation.setOnClickListener(v -> {
+            edtLocation.setFocusable(true);
+            edtLocation.setFocusableInTouchMode(true);
+            edtLocation.requestFocus();
+        });
         loadData();
+        btnFind.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                if (imm != null && getCurrentFocus() != null) {
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                }
+                String address = edtLocation.getText().toString().trim();
+                if(address == null || address.isEmpty()){
+                    Toast.makeText(HomeActivity.this, "Address can not empty", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                List<ItemDTO> filteredList = items.stream()
+                        .filter(item -> item.getAddress() != null
+                                && item.getAddress().toLowerCase().contains(address.toLowerCase()))
+                        .collect(Collectors.toList());
+                adapter.setData(filteredList);
+            }
+        });
     }
 
     private void loadData() {
@@ -64,8 +97,9 @@ public class HomeActivity extends AppCompatActivity implements ItemAdapter.OnIte
 
                 if (response.isSuccessful() && response.body() != null) {
                     // Lấy danh sách thực bên trong BaseResponse
-                    List<ItemDTO> list = response.body().getData();
-                    adapter.setData(list);
+                    items = response.body().getData();
+
+                    adapter.setData(items);
                 } else {
                     Toast.makeText(HomeActivity.this, "Load error: " + response.code(), Toast.LENGTH_SHORT).show();
                 }

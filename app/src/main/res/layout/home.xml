@@ -122,11 +122,3 @@
     </LinearLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-
-
-<!--    EditText edtLocation = findViewById(R.id.edtLocation);-->
-<!--    edtLocation.setOnClickListener(v -> {-->
-<!--    edtLocation.setFocusable(true);-->
-<!--    edtLocation.setFocusableInTouchMode(true);-->
-<!--    edtLocation.requestFocus();-->
-<!--    });-->
