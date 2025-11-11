@@ -1,20 +1,24 @@
 package com.example.carrental.activities;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageView; // ✅ Đã import
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide; // ✅ Đã import
 import com.example.carrental.R;
 import com.example.carrental.modals.BaseResponse;
 import com.example.carrental.modals.enums.FuelType;
 import com.example.carrental.modals.enums.Transmission;
 import com.example.carrental.modals.item.CarDTO;
-import com.example.carrental.modals.item.ItemDTO; // ✅ Đã import ItemDTO
+import com.example.carrental.modals.item.ItemDTO;
 import com.example.carrental.network.RetrofitClient;
 import com.example.carrental.network.api.ItemService;
 import com.google.android.material.textfield.TextInputEditText;
@@ -28,7 +32,11 @@ public class AddCarActivity extends AppCompatActivity {
     private TextInputEditText edtBrand, edtModel, edtYear, edtLicensePlate, edtSeats, edtCapacity;
     private AutoCompleteTextView spinnerTransmission, spinnerFuelType;
     private Button btnAddCar;
-    private Button btnCancel; // ✅ Thêm nút Cancel
+    private Button btnCancel;
+
+    // --- KHAI BÁO CÁC VIEW MỚI CHO HÌNH ẢNH ---
+    private ImageView imgPreview;
+    private TextInputEditText edtImageUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +53,13 @@ public class AddCarActivity extends AppCompatActivity {
         spinnerTransmission = findViewById(R.id.spinnerTransmission);
         spinnerFuelType = findViewById(R.id.spinnerFuelType);
         btnAddCar = findViewById(R.id.btnAddCar);
-        btnCancel = findViewById(R.id.btnCancel); // ✅ Ánh xạ nút Cancel
+        btnCancel = findViewById(R.id.btnCancel);
+
+        // --- ÁNH XẠ CÁC VIEW MỚI ---
+        imgPreview = findViewById(R.id.imgPreview);
+        // Lưu ý: ID này phải là của TextInputEditText bên trong TextInputLayout
+        edtImageUrl = findViewById(R.id.edtImageUrl);
+
 
         // Set dữ liệu cho dropdown Hộp số
         String[] transmissions = {
@@ -65,9 +79,52 @@ public class AddCarActivity extends AppCompatActivity {
         // Xử lý nút Thêm xe
         btnAddCar.setOnClickListener(v -> addCar());
 
-        // ✅ Xử lý nút Hủy
+        // Xử lý nút Hủy
         btnCancel.setOnClickListener(v -> finish());
+
+        // --- BỘ LẮNG NGHE SỰ KIỆN THAY ĐỔI TEXT ĐỂ CẬP NHẬT ẢNH ---
+        edtImageUrl.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Không cần làm gì
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Không cần làm gì
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // s chính là nội dung hiện tại của ô EditText
+                String imageUrl = s.toString().trim(); // Lấy URL và xóa khoảng trắng thừa
+                updateImagePreview(imageUrl); // Gọi hàm để cập nhật ảnh
+            }
+        });
+
+        // Khởi tạo ảnh preview ban đầu với placeholder
+        updateImagePreview("");
     }
+
+    /**
+     * Hàm cập nhật ảnh xem trước (imgPreview) dựa trên URL nhập vào.
+     * Sử dụng Glide để tải ảnh. Nếu URL trống hoặc có lỗi, sẽ hiển thị ảnh placeholder.
+     * @param url Chuỗi URL của hình ảnh
+     */
+    private void updateImagePreview(String url) {
+        if (url == null || url.isEmpty()) {
+            // Nếu URL trống, hiển thị ảnh placeholder
+            imgPreview.setImageResource(R.drawable.placeholder);
+        } else {
+            // Nếu có URL, dùng Glide để tải ảnh
+            Glide.with(this) // Context của Activity
+                    .load(url) // URL ảnh cần tải
+                    .placeholder(R.drawable.placeholder) // Ảnh hiển thị trong lúc đang tải
+                    .error(R.drawable.placeholder) // Ảnh hiển thị nếu có lỗi (quan trọng)
+                    .into(imgPreview); // ImageView để hiển thị ảnh
+        }
+    }
+
 
     private void addCar() {
         try {
@@ -83,24 +140,25 @@ public class AddCarActivity extends AppCompatActivity {
             car.setTransmission(Transmission.valueOf(spinnerTransmission.getText().toString()));
             car.setFuelType(FuelType.valueOf(spinnerFuelType.getText().toString()));
 
+            // TODO: Ở bước tiếp theo, bạn sẽ cần lấy URL từ edtImageUrl
+            // và thêm nó vào một danh sách ảnh để gửi lên server.
+            // Tạm thời, logic này chưa xử lý việc gửi ảnh lên backend.
+
             ItemService itemService = RetrofitClient.createService(this, ItemService.class);
 
-            // ✅ SỬA LỖI: Dùng đúng kiểu ItemDTO trong Callback để khớp với ItemService
             itemService.createCar(car).enqueue(new Callback<BaseResponse<ItemDTO>>() {
                 @Override
                 public void onResponse(Call<BaseResponse<ItemDTO>> call, Response<BaseResponse<ItemDTO>> response) {
                     if (response.isSuccessful() && response.body() != null) {
                         Toast.makeText(AddCarActivity.this, "Thêm xe thành công!", Toast.LENGTH_SHORT).show();
 
-                        // Lấy ItemDTO trả về để có thể lấy ID nếu cần
                         ItemDTO newItem = response.body().getData();
                         Log.d("AddCar", "Đã tạo item mới với ID: " + newItem.getId());
 
-                        // TODO: Chuyển sang màn hình upload ảnh với ID của item
+                        // TODO: Chuyển sang màn hình upload ảnh với ID của item và URL ảnh
 
                         finish(); // Đóng Activity và quay lại danh sách
                     } else {
-                        // Cải thiện hiển thị lỗi chi tiết từ server
                         String errorMessage = "Thêm xe thất bại!";
                         if (response.errorBody() != null) {
                             try {

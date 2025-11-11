@@ -9,6 +9,7 @@ import java.util.List;
 
 public class ItemDTO {
     private Long id;
+
     private UserDTO owner;
 
     private String name;

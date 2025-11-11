@@ -99,8 +99,6 @@
                 android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- ✅ BẮT ĐẦU SẮP XẾP 2 CỘT -->
-
         <!-- Năm sản xuất (Cột 1) -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutYear"
