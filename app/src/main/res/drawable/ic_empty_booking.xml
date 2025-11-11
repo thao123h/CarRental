@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+
+    <!-- Background circle -->
+    <path
+        android:fillColor="#E8F5E9"
+        android:pathData="M100,100m-80,0a80,80 0,1,1 160,0a80,80 0,1,1 -160,0" />
+
+    <!-- Car icon -->
+    <path
+        android:fillColor="#4CAF50"
+        android:pathData="M60,85 L140,85 L145,95 L150,110 L150,130 L140,130 L140,135 L130,135 L130,130 L70,130 L70,135 L60,135 L60,130 L50,130 L50,110 L55,95 Z">
+    </path>
+
+    <!-- Car window -->
+    <path
+        android:fillColor="#81C784"
+        android:pathData="M70,90 L130,90 L135,100 L135,105 L65,105 L65,100 Z" />
+
+    <!-- Left wheel -->
+    <path
+        android:fillColor="#424242"
+        android:pathData="M70,125m-8,0a8,8 0,1,1 16,0a8,8 0,1,1 -16,0" />
+
+    <!-- Right wheel -->
+    <path
+        android:fillColor="#424242"
+        android:pathData="M130,125m-8,0a8,8 0,1,1 16,0a8,8 0,1,1 -16,0" />
+
+    <!-- Calendar/booking icon -->
+    <path
+        android:fillColor="#66BB6A"
+        android:pathData="M110,55 L110,50 L115,50 L115,55 L125,55 L125,50 L130,50 L130,55 L135,55 L135,80 L105,80 L105,55 Z" />
+
+    <!-- Calendar grid -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2"
+        android:pathData="M105,65 L135,65 M110,60 L110,80 M120,60 L120,80 M130,60 L130,80" />
+
+</vector>

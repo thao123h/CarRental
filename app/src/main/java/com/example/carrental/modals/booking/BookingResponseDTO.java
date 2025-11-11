@@ -12,19 +12,37 @@ public class BookingResponseDTO {
     private ItemDTO item;
     private UserDTO renter;
 
+    private String startTime;       // đổi từ LocalDateTime → String
+    private String endTime;         // đổi từ LocalDateTime → String
+    private Status status;
+    private PaymentStatus paymentStatus;
+    private String cancellationReason;
+    private String createdAt;       // đổi từ LocalDateTime → String
+    private String updatedAt;       // đổi từ LocalDateTime → String
+
+    // ==== GETTERS ====
+    // Constructor
+    public BookingResponseDTO() {
+    }
+
+    // Getters
     public Long getId() {
         return id;
+    }
+
+    public ItemDTO getItem() {
+        return item;
     }
 
     public UserDTO getRenter() {
         return renter;
     }
 
-    public LocalDateTime getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public LocalDateTime getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
@@ -40,21 +58,12 @@ public class BookingResponseDTO {
         return cancellationReason;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public LocalDateTime getUpdatedAt() {
+    public String getUpdatedAt() {
         return updatedAt;
     }
 
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
-    private Status status;
-    private PaymentStatus paymentStatus;
-
-    private String cancellationReason;
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
 }

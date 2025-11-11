@@ -57,11 +57,4 @@ public interface BookingService {
     Call<BaseResponse<List<ScheduleDTO>>> getAllBookingsBySchedule(@Query("itemId") Long itemId);
 
     //  Lấy danh sách itemId không khả dụng trong khoảng thời gian
-    @GET("bookings/unavailable-items")
-    Call<BaseResponse<Set<Long>>> getUnavailableItemIdsByDateRange(
-            @Query("startDate") String startDate, // Retrofit không hỗ trợ trực tiếp LocalDateTime
-            @Query("endDate") String endDate
-    );
-    }
-
-
+}

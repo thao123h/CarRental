@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.carrental.R;
-import com.example.carrental.activities.HomeActivity;
 import com.example.carrental.modals.item.ItemDTO;
 
 import java.util.List;
@@ -22,10 +21,15 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.VH> {
     private List<ItemDTO> list;
     private Context ctx;
 
-    public ItemAdapter(Context ctx, List<ItemDTO> list, HomeActivity homeActivity) {
+
+    private OnItemActionListener listener;
+
+    public ItemAdapter(Context ctx, List<ItemDTO> list, OnItemActionListener listener) {
         this.ctx = ctx;
         this.list = list;
+        this.listener = listener;
     }
+
 
     @NonNull
     @Override
@@ -40,11 +44,15 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.VH> {
         holder.tvCarLocation.setText(car.getAddress());
         holder.tvCarPrice.setText(String.format("%,.0fđ/ngày", car.getPrice()));
 
-
         Glide.with(ctx)
                 .load(car.getItemImages().get(0).getImageUrl())
                 .placeholder(R.drawable.ic_launcher_background)
                 .into(holder.imgCar);
+        holder.imgCar.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onCarImageClick(car);
+            }
+        });
     }
 
     @Override
@@ -59,7 +67,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.VH> {
     }
 
     public interface OnItemActionListener {
-
+        void onCarImageClick(ItemDTO car);
     }
 
     static class VH extends RecyclerView.ViewHolder {
