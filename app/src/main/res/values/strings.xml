@@ -1,3 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">CarRental</string>
+
+    <!-- Screen Titles -->
+    <string name="title_my_trips">Chuyến của tôi</string>
+    <string name="title_booking_requests">Đơn cho thuê</string>
+    <string name="title_booking_detail">Chi tiết đơn</string>
+
+    <!-- Empty State -->
+    <string name="empty_no_bookings">Bạn không có chuyến hiện tại</string>
+    <string name="empty_view_history">Xem lịch sử chuyến</string>
+
+    <!-- Booking Status -->
+    <string name="status_pending">Đang xử lý</string>
+    <string name="status_confirmed">Chấp Thuận</string>
+    <string name="status_negotiation">Đang thương lượng</string>
+    <string name="status_completed">Hoàn thành</string>
+    <string name="status_cancelled">Đã hủy</string>
+
+    <!-- Booking Details -->
+    <string name="label_price_per_day">• Đơn giá: %s VNĐ / Ngày</string>
+    <string name="label_rental_date">• Ngày thuê: %s</string>
+    <string name="label_return_date">• Ngày trả: %s</string>
+    <string name="label_location">• Địa điểm: %s</string>
+    <string name="label_renter_name">• Người thuê: %s</string>
+    <string name="label_renter_phone">• SĐT người thuê: %s</string>
+    <string name="label_owner_name">• Chủ xe: %s</string>
+    <string name="label_owner_phone">• SĐT Chủ xe: %s</string>
+    <string name="label_booking_status">Tình trạng đơn:</string>
+
+    <!-- Date Format -->
+    <string name="date_format_display">dd/MM/yyyy</string>
+    <string name="date_range_format">From: %s → To: %s</string>
+
+    <!-- Action Buttons -->
+    <string name="btn_accept">CHẤP THUẬN</string>
+    <string name="btn_reject">TỪ CHỐI</string>
+    <string name="btn_cancel">HỦY ĐƠN</string>
+
+    <!-- Menu -->
+    <string name="menu_switch_to_renter">Xem chuyến của tôi</string>
+    <string name="menu_switch_to_owner">Xem đơn cho thuê</string>
+
+    <!-- Dialog Messages -->
+    <string name="dialog_cancel_title">Hủy đơn</string>
+    <string name="dialog_cancel_message">Bạn có chắc chắn muốn hủy đơn này?</string>
+    <string name="dialog_cancel_reason_hint">Lý do hủy (không bắt buộc)</string>
+
+    <string name="dialog_accept_title">Chấp thuận đơn</string>
+    <string name="dialog_accept_message">Bạn có chắc chắn muốn chấp thuận đơn này?</string>
+
+    <string name="dialog_reject_title">Từ chối đơn</string>
+    <string name="dialog_reject_message">Bạn có chắc chắn muốn từ chối đơn này?</string>
+    <string name="dialog_reject_reason_hint">Lý do từ chối</string>
+
+    <string name="dialog_yes">Có</string>
+    <string name="dialog_no">Không</string>
+    <string name="dialog_confirm">Xác nhận</string>
+    <string name="dialog_cancel_action">Hủy</string>
+
+    <!-- Toast Messages -->
+    <string name="toast_cancel_success">Đã hủy đơn thành công</string>
+    <string name="toast_accept_success">Đã chấp thuận đơn thành công</string>
+    <string name="toast_reject_success">Đã từ chối đơn thành công</string>
+    <string name="toast_error">Có lỗi xảy ra, vui lòng thử lại</string>
+    <string name="toast_loading">Đang tải...</string>
+
+    <!-- Error Messages -->
+    <string name="error_load_bookings">Không thể tải danh sách đơn</string>
+    <string name="error_load_detail">Không thể tải chi tiết đơn</string>
+    <string name="error_update_booking">Không thể cập nhật đơn</string>
+    <string name="error_network">Lỗi kết nối mạng</string>
+    <string name="app_name">Mioto</string>
+
 </resources>

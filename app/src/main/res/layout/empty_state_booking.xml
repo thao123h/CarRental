@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="32dp">
+
+    <!-- Empty State Icon/Illustration -->
+    <ImageView
+        android:id="@+id/ivEmptyState"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/ic_empty_booking"
+        android:contentDescription="No bookings"
+        android:scaleType="fitCenter" />
+
+    <!-- Empty State Text -->
+    <TextView
+        android:id="@+id/tvEmptyMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Bạn không có chuyến hiện tại"
+        android:textSize="18sp"
+        android:textColor="#757575"
+        android:textAlignment="center"
+        android:gravity="center" />
+
+    <!-- Optional: View History Link -->
+    <TextView
+        android:id="@+id/tvViewHistory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Xem lịch sử chuyến"
+        android:textSize="14sp"
+        android:textColor="#4CAF50"
+        android:textStyle="bold"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="8dp"
+        android:background="?attr/selectableItemBackground" />
+
+</LinearLayout>

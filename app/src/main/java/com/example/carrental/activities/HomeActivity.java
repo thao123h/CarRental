@@ -5,9 +5,12 @@ package com.example.carrental.activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -22,6 +25,7 @@ import com.example.carrental.modals.BaseResponse;
 import com.example.carrental.modals.enums.Category;
 import com.example.carrental.modals.item.ItemDTO;
 import com.example.carrental.network.RetrofitClient;
+import com.example.carrental.network.TokenManager;
 import com.example.carrental.network.api.ItemService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import retrofit2.Call;
@@ -38,6 +42,7 @@ public class HomeActivity extends AppCompatActivity implements ItemAdapter.OnIte
     private static final int REQ_ADD = 1001;
     private static final int REQ_EDIT = 1002;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +55,13 @@ public class HomeActivity extends AppCompatActivity implements ItemAdapter.OnIte
         rv.setAdapter(adapter);
 
         swipe.setOnRefreshListener(this::loadData);
+
+        Button btnMyBookings = findViewById(R.id.btnMyBookings);
+
+        btnMyBookings.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, BookingListActivity.class);
+            startActivity(intent);
+        });
 
         loadData();
     }

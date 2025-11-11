@@ -7,13 +7,33 @@ import com.example.carrental.modals.item.ItemDTO;
 
 import java.time.LocalDateTime;
 
+/**
+ * Booking Response DTO
+ * Matches the backend BookingResponseDTO structure
+ */
 public class BookingResponseDTO {
     private Long id;
     private ItemDTO item;
     private UserDTO renter;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
+    private Status status;
+    private PaymentStatus paymentStatus;
+    private String cancellationReason;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
+    // Constructor
+    public BookingResponseDTO() {
+    }
+
+    // Getters
     public Long getId() {
         return id;
+    }
+
+    public ItemDTO getItem() {
+        return item;
     }
 
     public UserDTO getRenter() {
@@ -48,13 +68,44 @@ public class BookingResponseDTO {
         return updatedAt;
     }
 
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
-    private Status status;
-    private PaymentStatus paymentStatus;
+    // Setters
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    private String cancellationReason;
-    private LocalDateTime createdAt;
+    public void setItem(ItemDTO item) {
+        this.item = item;
+    }
 
-    private LocalDateTime updatedAt;
+    public void setRenter(UserDTO renter) {
+        this.renter = renter;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public void setPaymentStatus(PaymentStatus paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
+
+    public void setCancellationReason(String cancellationReason) {
+        this.cancellationReason = cancellationReason;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 }
