@@ -40,7 +40,7 @@ public class ProfileActivity extends AppCompatActivity {
 
 
     // Các View cho từng mục
-    private View itemLicense, itemPhone, itemEmail, itemFacebook, itemGoogle;
+    private View itemLicense, itemPhone, itemEmail, cccd, itemGoogle;
     private Button btnLogout;
 
 
@@ -53,7 +53,7 @@ public class ProfileActivity extends AppCompatActivity {
         apiService = RetrofitClient.createService(this, AuthApiService.class);
         tokenManager = new TokenManager(this);
 
-        // Ánh xạ Header
+        // Ánh xạ (giữ nguyên)
         ivBack = findViewById(R.id.ivBack);
         ivAvatar = findViewById(R.id.ivAvatar);
         ivEdit = findViewById(R.id.ivEdit);
@@ -61,30 +61,45 @@ public class ProfileActivity extends AppCompatActivity {
         tvName = findViewById(R.id.tvName);
         tvJoinDateValue = findViewById(R.id.tvJoinDateValue);
         tvJoinDate = findViewById(R.id.tvJoinDate);
-
-        // Ánh xạ từng mục (lấy view cha)
-        itemLicense = findViewById(R.id.itemLicense);
+        itemLicense = findViewById(R.id.itemLicense); // <-- Đã có
         itemPhone = findViewById(R.id.itemPhone);
         itemEmail = findViewById(R.id.itemEmail);
-        itemFacebook = findViewById(R.id.itemFacebook);
+        cccd = findViewById(R.id.cccd); // <-- Đã có
         itemGoogle = findViewById(R.id.itemGoogle);
         btnLogout = findViewById(R.id.btnLogout);
 
 
-        // Xử lý sự kiện click
-        ivBack.setOnClickListener(v -> finish()); // Nút X -> Đóng Activity
+        // --- Xử lý sự kiện click ---
+        ivBack.setOnClickListener(v -> finish());
         btnLogout.setOnClickListener(v -> logout());
 
+        // Sửa Tên
         ivEdit.setOnClickListener(v -> {
             showEditNameDialog();
         });
+
+        // Sửa Email
         itemEmail.setOnClickListener(v -> {
             showEditEmailDialog();
         });
-        // Gọi API để lấp đầy dữ liệu
+
+        // !!! THÊM SỰ KIỆN CLICK CHO GPLX VÀ CCCD !!!
+        itemLicense.setOnClickListener(v -> {
+            showEditLicenseDialog();
+        });
+
+        cccd.setOnClickListener(v -> {
+            showEditCccdDialog();
+        });
+
+        itemPhone.setOnClickListener(v -> {
+            showEditPhoneDialog();
+        });
+
+        // Gọi API
         fetchUserProfile();
 
-        // Thiết lập dữ liệu tĩnh (từ ảnh mẫu)
+        // Thiết lập dữ liệu tĩnh (chỉ còn Google)
         setupStaticData();
     }
 
@@ -116,12 +131,10 @@ public class ProfileActivity extends AppCompatActivity {
         this.currentUser = user;
         // 1. Header
         tvName.setText(user.getName());
-        // (UserDTO của bạn không có ngày tham gia, nên tôi sẽ ẩn nó)
         tvJoinDate.setVisibility(View.GONE);
         tvJoinDateValue.setVisibility(View.GONE);
 
         // 2. Mục Giấy phép lái xe
-        // (UserDTO không có trạng thái, ta tự suy luận)
         if (user.getLicenseNumber() != null && !user.getLicenseNumber().isEmpty()) {
             setupItemRow(itemLicense, "Giấy phép lái xe", "Đã xác thực", user.getLicenseNumber(), true);
         } else {
@@ -136,13 +149,17 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         // 4. Mục Email
-        // Email luôn có (vì dùng để đăng nhập)
         setupItemRow(itemEmail, "Email", "Đã xác thực", user.getEmail(), true);
+
+        // 5. MỤC CCCD (Chuyển từ setupStaticData lên đây)
+        if (user.getIdentityCard() != null && !user.getIdentityCard().isEmpty()) {
+            setupItemRow(cccd, "CCCD", "Đã xác thực", user.getIdentityCard(), true);
+        } else {
+            setupItemRow(cccd, "CCCD", "Chưa xác thực", "Xác thực ngay", false);
+        }
     }
 
     private void setupStaticData() {
-        // Thiết lập 2 mục Facebook và Google (không có trong API)
-        setupItemRow(itemFacebook, "Facebook", "Chưa xác thực", "Liên kết ngay", false);
         setupItemRow(itemGoogle, "Google", "Chưa xác thực", "Liên kết ngay", false);
     }
 
@@ -172,30 +189,9 @@ public class ProfileActivity extends AppCompatActivity {
             return;
         }
 
-        // 1. Cập nhật đối tượng 'currentUser' với giá trị mới
         currentUser.setName(newName);
-        // currentUser.setPhone(newPhone); // Cập nhật các trường khác nếu cần
 
-        // 2. Gửi *toàn bộ* đối tượng DTO đã cập nhật này lên server
-        apiService.updateMe(currentUser).enqueue(new Callback<BaseResponse<UserDTO>>() {
-            @Override
-            public void onResponse(Call<BaseResponse<UserDTO>> call, Response<BaseResponse<UserDTO>> response) {
-                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
-                    Toast.makeText(ProfileActivity.this, "Cập nhật thành công!", Toast.LENGTH_SHORT).show();
-
-                    // Lấy dữ liệu mới nhất (đã được cập nhật) từ server
-                    // và điền lại lên UI
-                    populateUserData(response.body().getData());
-                } else {
-                    Toast.makeText(ProfileActivity.this, "Cập nhật thất bại", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<BaseResponse<UserDTO>> call, Throwable t) {
-                Toast.makeText(ProfileActivity.this, "Lỗi mạng: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        callUpdateApi();
     }
 
     private void showEditNameDialog() {
@@ -305,18 +301,108 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         // 1. Cập nhật đối tượng 'currentUser' với giá trị mới
-        currentUser.setEmail(newEmail); // <-- Sửa setName thành setEmail
+        currentUser.setEmail(newEmail);
 
-        // 2. Gửi *toàn bộ* đối tượng DTO đã cập nhật này lên server
-        // (Hàm updateMe sẽ gửi cả object, nên backend sẽ tự biết cập nhật email)
+        callUpdateApi();
+    }
+
+    private void showEditLicenseDialog() {
+        if (currentUser == null) {
+            Toast.makeText(this, "Chưa tải được thông tin, vui lòng thử lại", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Thay đổi số GPLX"); // <-- Sửa title
+
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT); // <-- Sửa kiểu nhập (GPLX có thể có chữ)
+        input.setText(currentUser.getLicenseNumber()); // <-- Sửa getter
+
+        FrameLayout container = new FrameLayout(this);
+        // ... (code FrameLayout giữ nguyên)
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.setMargins(50, 20, 50, 20);
+        input.setLayoutParams(params);
+        container.addView(input);
+        builder.setView(container);
+
+        builder.setPositiveButton("Lưu", (dialog, which) -> {
+            String newLicense = input.getText().toString().trim(); // <-- Đây là GPLX mới
+            if (!newLicense.isEmpty() && !newLicense.equals(currentUser.getLicenseNumber())) {
+                saveProfileLicense(newLicense); // <-- Gọi hàm save mới
+            }
+        });
+        builder.setNegativeButton("Hủy", (dialog, which) -> dialog.cancel());
+        builder.show();
+    }
+
+    private void saveProfileLicense(String newLicense) {
+        if (currentUser == null) {
+            Toast.makeText(this, "Thông tin user chưa được tải", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        currentUser.setLicenseNumber(newLicense); // <-- Sửa setter
+
+        // Gọi hàm cập nhật API (dùng chung)
+        callUpdateApi();
+    }
+
+    private void showEditCccdDialog() {
+        if (currentUser == null) {
+            Toast.makeText(this, "Chưa tải được thông tin, vui lòng thử lại", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Thay đổi số CCCD"); // <-- Sửa title
+
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_NUMBER); // <-- Sửa kiểu nhập (CCCD là số)
+        input.setText(currentUser.getIdentityCard()); // <-- Sửa getter
+
+        FrameLayout container = new FrameLayout(this);
+        // ... (code FrameLayout giữ nguyên)
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.setMargins(50, 20, 50, 20);
+        input.setLayoutParams(params);
+        container.addView(input);
+        builder.setView(container);
+
+        builder.setPositiveButton("Lưu", (dialog, which) -> {
+            String newCccd = input.getText().toString().trim(); // <-- Đây là CCCD mới
+            if (!newCccd.isEmpty() && !newCccd.equals(currentUser.getIdentityCard())) {
+                saveProfileCccd(newCccd); // <-- Gọi hàm save mới
+            }
+        });
+        builder.setNegativeButton("Hủy", (dialog, which) -> dialog.cancel());
+        builder.show();
+    }
+
+    private void saveProfileCccd(String newCccd) {
+        if (currentUser == null) {
+            Toast.makeText(this, "Thông tin user chưa được tải", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        currentUser.setIdentityCard(newCccd); // <-- Sửa setter
+
+        // Gọi hàm cập nhật API (dùng chung)
+        callUpdateApi();
+    }
+
+    private void callUpdateApi() {
+        if (currentUser == null) {
+            Toast.makeText(this, "Lỗi: Dữ liệu người dùng bị rỗng", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Gửi *toàn bộ* đối tượng DTO (đã được cập nhật) lên server
         apiService.updateMe(currentUser).enqueue(new Callback<BaseResponse<UserDTO>>() {
             @Override
             public void onResponse(Call<BaseResponse<UserDTO>> call, Response<BaseResponse<UserDTO>> response) {
                 if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
                     Toast.makeText(ProfileActivity.this, "Cập nhật thành công!", Toast.LENGTH_SHORT).show();
-
-                    // Lấy dữ liệu mới nhất (đã được cập nhật) từ server
-                    // và điền lại lên UI
+                    // Lấy dữ liệu mới nhất và điền lại lên UI
                     populateUserData(response.body().getData());
                 } else {
                     Toast.makeText(ProfileActivity.this, "Cập nhật thất bại", Toast.LENGTH_SHORT).show();
@@ -328,6 +414,48 @@ public class ProfileActivity extends AppCompatActivity {
                 Toast.makeText(ProfileActivity.this, "Lỗi mạng: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void showEditPhoneDialog() {
+        if (currentUser == null) {
+            Toast.makeText(this, "Chưa tải được thông tin, vui lòng thử lại", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Thay đổi số điện thoại"); // <-- Sửa title
+
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_PHONE); // <-- Sửa kiểu nhập
+        input.setText(currentUser.getPhone()); // <-- Sửa getter
+
+        FrameLayout container = new FrameLayout(this);
+        // ... (code FrameLayout giữ nguyên)
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.setMargins(50, 20, 50, 20);
+        input.setLayoutParams(params);
+        container.addView(input);
+        builder.setView(container);
+
+        builder.setPositiveButton("Lưu", (dialog, which) -> {
+            String newPhone = input.getText().toString().trim(); // <-- Đây là SĐT mới
+            if (!newPhone.isEmpty() && !newPhone.equals(currentUser.getPhone())) {
+                saveProfilePhone(newPhone); // <-- Gọi hàm save mới
+            }
+        });
+        builder.setNegativeButton("Hủy", (dialog, which) -> dialog.cancel());
+        builder.show();
+    }
+
+    private void saveProfilePhone(String newPhone) {
+        if (currentUser == null) {
+            Toast.makeText(this, "Thông tin user chưa được tải", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        currentUser.setPhone(newPhone); // <-- Sửa setter
+
+        // Gọi hàm cập nhật API (dùng chung)
+        callUpdateApi();
     }
 
     private void logout() {

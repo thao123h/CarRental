@@ -156,7 +156,7 @@
 
                 <!-- Mục 4: Facebook -->
                 <include
-                    android:id="@+id/itemFacebook"
+                    android:id="@+id/cccd"
                     layout="@layout/item_profile_row" />
 
                 <!-- Mục 5: Google -->
