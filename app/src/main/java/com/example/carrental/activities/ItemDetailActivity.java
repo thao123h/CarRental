@@ -1,23 +1,31 @@
 package com.example.carrental.activities;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.carrental.R;
 import com.example.carrental.modals.BaseResponse;
+import com.example.carrental.modals.booking.ScheduleDTO;
 import com.example.carrental.modals.item.ItemDTO;
 import com.example.carrental.network.RetrofitClient;
 import com.example.carrental.network.api.ItemService;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -29,9 +37,11 @@ public class ItemDetailActivity extends AppCompatActivity {
     private TextView tvItemName, tvAvailability, tvPrice, tvDeposit, tvDescription, tvAddress, tvCategory;
     private TextView tvTotalDays, tvEstimatedTotal;
     private Button btnStartDate, btnEndDate, btnConfirm;
+    private ImageView imgItem;
     private ItemService api;
     private Calendar startDate, endDate;
     private double pricePerDay = 0.0;
+    private List<ScheduleDTO> scheduleList = new ArrayList<>();
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
     private final DecimalFormat moneyFormat = new DecimalFormat("#,###");
@@ -44,7 +54,7 @@ public class ItemDetailActivity extends AppCompatActivity {
         initViews();
 
         // Nhận ID từ Intent
-        long itemId = getIntent().getLongExtra("itemId", -1);
+        long itemId = getIntent().getLongExtra("item_id", -1);
         if (itemId != -1) {
             loadItemDetail(itemId);
         } else {
@@ -62,6 +72,7 @@ public class ItemDetailActivity extends AppCompatActivity {
         tvPrice = findViewById(R.id.tv_price);
         tvDeposit = findViewById(R.id.tv_deposit);
         tvDescription = findViewById(R.id.tv_description);
+        imgItem = findViewById(R.id.img_item);
         tvAddress = findViewById(R.id.tv_address);
         tvCategory = findViewById(R.id.tv_category);
         tvTotalDays = findViewById(R.id.tv_total_days);
@@ -89,16 +100,20 @@ public class ItemDetailActivity extends AppCompatActivity {
             }
         });
     }
-
     private void bindData(ItemDTO item) {
         tvItemName.setText(item.getName());
-        tvPrice.setText("₫ " + moneyFormat.format(item.getItemValue()));
-        tvDeposit.setText("₫ " + moneyFormat.format(item.getDepositAmount()));
+        tvPrice.setText( String.format("%,.0fđ/ngày",item.getPrice()));
+        tvDeposit.setText( String.format("%,.0fđ", item.getDepositAmount()));
         tvDescription.setText(item.getDescription());
         tvAddress.setText("Location: " + item.getAddress());
         tvCategory.setText("Category: " + item.getCategory());
-
         pricePerDay = item.getPrice();
+        if (item.getItemImages() != null && !item.getItemImages().isEmpty()) {
+            Glide.with(this)
+                    .load(item.getItemImages().get(0).getImageUrl())
+                    .placeholder(R.drawable.ic_launcher_background)
+                    .into(imgItem);
+        }
     }
 
     private void setupDatePickers() {
@@ -108,18 +123,46 @@ public class ItemDetailActivity extends AppCompatActivity {
 
     private void showDatePicker(boolean isStartDate) {
         Calendar calendar = Calendar.getInstance();
+
         DatePickerDialog dialog = new DatePickerDialog(
                 this,
                 (view, year, month, dayOfMonth) -> {
                     Calendar selected = Calendar.getInstance();
                     selected.set(year, month, dayOfMonth);
+                    selected.set(Calendar.HOUR_OF_DAY, 0);
+                    selected.set(Calendar.MINUTE, 0);
+                    selected.set(Calendar.SECOND, 0);
 
+                    Calendar today = Calendar.getInstance();
+                    today.set(Calendar.HOUR_OF_DAY, 0);
+                    today.set(Calendar.MINUTE, 0);
+                    today.set(Calendar.SECOND, 0);
+
+                    //  Không cho chọn ngày trước hôm nay
+                    if (selected.before(today)) {
+                        Toast.makeText(this, "Không thể chọn ngày trong quá khứ", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    //  Nếu là EndDate và nhỏ hơn StartDate → báo lỗi
+                    if (!isStartDate && startDate != null && selected.before(startDate)) {
+                        Toast.makeText(this, "Ngày kết thúc phải sau ngày bắt đầu", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    //  Nếu ngày nằm trong khoảng bị đặt (ScheduleDTO) → báo lỗi
+                    if (isInBookedDate(selected)) {
+                        Toast.makeText(this, "Ngày này đã được đặt, vui lòng chọn ngày khác", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    //  Nếu hợp lệ → lưu lại
                     if (isStartDate) {
                         startDate = selected;
-                        btnStartDate.setText("Start: " + dateFormat.format(selected.getTime()));
+                        btnStartDate.setText("Bắt đầu: " + dateFormat.format(selected.getTime()));
                     } else {
                         endDate = selected;
-                        btnEndDate.setText("End: " + dateFormat.format(selected.getTime()));
+                        btnEndDate.setText("Kết thúc: " + dateFormat.format(selected.getTime()));
                     }
 
                     calculateTotal();
@@ -128,15 +171,45 @@ public class ItemDetailActivity extends AppCompatActivity {
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)
         );
+
+        // ⚙️ Giới hạn: không cho chọn ngày trước hôm nay
+        dialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+
         dialog.show();
     }
+    private boolean isInBookedDate(Calendar selected) {
+        if (scheduleList == null || scheduleList.isEmpty()) return false;
 
+        for (ScheduleDTO s : scheduleList) {
+            LocalDateTime start = s.getStartTime();
+            LocalDateTime end = s.getEndTime();
+
+            // convert sang Calendar để so sánh
+            Calendar startCal = Calendar.getInstance();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startCal.set(start.getYear(), start.getMonthValue() - 1, start.getDayOfMonth(), 0, 0, 0);
+            }
+
+            Calendar endCal = Calendar.getInstance();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                endCal.set(end.getYear(), end.getMonthValue() - 1, end.getDayOfMonth(), 23, 59, 59);
+            }
+
+            if (!selected.before(startCal) && !selected.after(endCal)) {
+                return true; // nằm trong khoảng bị book
+            }
+        }
+        return false;
+    }
+
+
+    @SuppressLint("DefaultLocale")
     private void calculateTotal() {
         if (startDate != null && endDate != null && !endDate.before(startDate)) {
             long diffMillis = endDate.getTimeInMillis() - startDate.getTimeInMillis();
             int days = (int) (diffMillis / (1000 * 60 * 60 * 24)) + 1;
             tvTotalDays.setText("Days: " + days);
-            tvEstimatedTotal.setText("Total: ₫ " + moneyFormat.format(days * pricePerDay));
+            tvEstimatedTotal.setText(String.format("%,.0fđ", pricePerDay*days));
         } else {
             tvTotalDays.setText("Days: 0");
             tvEstimatedTotal.setText("Total: 0đ");

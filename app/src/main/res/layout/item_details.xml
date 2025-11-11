@@ -20,25 +20,15 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:titleEnabled="false">
 
-            <!-- Image slider (ViewPager2) -->
-<!--            <androidx.viewpager2.widget.ViewPager2-->
-<!--                android:id="@+id/viewpager_images"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:contentDescription="@string/item_images"-->
-<!--                app:layout_collapseMode="parallax" />-->
-
-
-
-<!--            <androidx.appcompat.widget.Toolbar-->
-<!--                android:id="@+id/toolbar"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="?attr/actionBarSize"-->
-<!--                app:layout_collapseMode="pin"-->
-<!--                app:navigationIcon="@drawable/ic_arrow_back"-->
-<!--                android:background="@android:color/transparent" />-->
+            <ImageView
+                android:id="@+id/img_item"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                app:layout_collapseMode="parallax" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <!-- Main content -->
@@ -72,7 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:text="Available"
+                android:text="Đang sẵn"
                 android:textAllCaps="true"
                 android:textSize="12sp" />
 
@@ -94,7 +84,7 @@
                         android:id="@+id/label_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Price / day"
+                        android:text="Giá / Ngày"
                         android:textSize="12sp" />
 
                     <TextView
@@ -116,7 +106,7 @@
                         android:id="@+id/label_deposit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Deposit"
+                        android:text="Tiền cọc"
                         android:textSize="12sp" />
 
                     <TextView
@@ -154,7 +144,7 @@
                         android:id="@+id/label_info"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Car Information"
+                        android:text="Thông tin xe"
                         android:textStyle="bold"
                         android:textSize="16sp" />
 
@@ -189,7 +179,7 @@
                 android:id="@+id/label_dates"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Choose rental dates"
+                android:text="Chọn ngày thuê"
                 android:textStyle="bold"
                 android:textSize="16sp" />
 
@@ -205,8 +195,10 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="48dp"
-                    android:text="Start date"
-                    app:iconGravity="textStart" />
+                    android:text="Bắt đầu"
+                    app:iconGravity="textStart"
+                    android:backgroundTint="@color/teal_700"
+                    android:textColor="#FFF" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_end_date"
@@ -214,8 +206,10 @@
                     android:layout_weight="1"
                     android:layout_height="48dp"
                     android:layout_marginStart="8dp"
-                    android:text="End date"
-                    app:iconGravity="textStart" />
+                    android:text="Kết thúc"
+                    app:iconGravity="textStart"
+                    android:backgroundTint="@color/teal_700"
+                    android:textColor="#FFF" />
             </LinearLayout>
 
             <!-- Summary: total days and estimated price -->
@@ -249,7 +243,9 @@
                 android:layout_marginTop="16dp"
                 android:text="Tiếp tục"
                 android:textAllCaps="false"
-                app:cornerRadius="8dp" />
+                app:cornerRadius="8dp"
+                android:backgroundTint="@color/teal_700"
+                android:textColor="#FFF" />
 
             <!-- Owner / contact info -->
 

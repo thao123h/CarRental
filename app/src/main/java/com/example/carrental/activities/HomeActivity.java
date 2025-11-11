@@ -79,37 +79,6 @@ public class HomeActivity extends AppCompatActivity implements ItemAdapter.OnIte
         });
     }
 
-//
-//    @Override
-//    public void onEdit(Product p) {
-//        Intent i = new Intent(this, AddEditActivity.class);
-//        i.putExtra(AddEditActivity.EXTRA_PRODUCT, p);
-//        startActivityForResult(i, REQ_EDIT);
-//    }
-//
-//    @Override
-//    public void onDelete(Product p) {
-//        new AlertDialog.Builder(this)
-//                .setTitle("Xóa")
-//                .setMessage("Bạn có chắc muốn xóa sản phẩm này?")
-//                .setPositiveButton("Có", (d, w) -> {
-//                    api.delete(p.getId()).enqueue(new Callback<Void>() {
-//                        @Override public void onResponse(Call<Void> call, Response<Void> response) {
-//                            if (response.isSuccessful()) {
-//                                Toast.makeText(MainActivity.this, "Đã xóa", Toast.LENGTH_SHORT).show();
-//                                loadData();
-//                            } else {
-//                                Toast.makeText(MainActivity.this, "Lỗi xóa: " + response.code(), Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                        @Override public void onFailure(Call<Void> call, Throwable t) {
-//                            Toast.makeText(MainActivity.this, "Network error", Toast.LENGTH_SHORT).show();
-//                        }
-//                    });
-//                })
-//                .setNegativeButton("Không", null)
-//                .show();
-//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -117,5 +86,12 @@ public class HomeActivity extends AppCompatActivity implements ItemAdapter.OnIte
         if ((requestCode == REQ_ADD || requestCode == REQ_EDIT) && resultCode == RESULT_OK) {
             loadData();
         }
+    }
+
+    @Override
+    public void onCarImageClick(ItemDTO car) {
+        Intent intent = new Intent(this, ItemDetailActivity.class);
+        intent.putExtra("item_id", car.getId());
+        startActivity(intent);
     }
 }

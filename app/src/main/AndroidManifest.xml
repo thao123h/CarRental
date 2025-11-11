@@ -15,6 +15,7 @@
         android:theme="@style/Theme.CarRental"
         android:usesCleartextTraffic="true"
         tools:ignore="ExtraText">
+        <activity android:name=".activities.ItemDetailActivity" />
 
         <activity
             android:name=".activities.HomeActivity"
