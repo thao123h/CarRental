@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_documents_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Documents card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            android:padding="12dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Giấy tờ xe"
+                    android:textSize="16sp"
+                    android:textColor="@color/text_primary"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_marginTop="8dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Tải lên giấy tờ liên quan (Đăng ký, bảo hiểm...)."
+                    android:textColor="@color/text_secondary"
+                    android:textSize="13sp"/>
+
+                <!-- Registration number -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_marginTop="12dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Số đăng ký (nếu có)">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_registration_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:inputType="text"
+                        android:padding="8dp"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Documents images -->
+                <LinearLayout
+                    android:layout_marginTop="12dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <ImageView
+                        android:id="@+id/iv_doc_1"
+                        android:layout_width="0dp"
+                        android:layout_height="160dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/rounded_card"
+                        android:src="@android:drawable/ic_menu_gallery"
+                        android:scaleType="center"
+                        android:tint="@color/light_grey"/>
+
+                    <View android:layout_width="8dp" android:layout_height="match_parent"/>
+
+                    <ImageView
+                        android:id="@+id/iv_doc_2"
+                        android:layout_width="0dp"
+                        android:layout_height="160dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/rounded_card"
+                        android:src="@android:drawable/ic_menu_gallery"
+                        android:scaleType="center"
+                        android:tint="@color/light_grey"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <View android:layout_width="match_parent" android:layout_height="24dp"/>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

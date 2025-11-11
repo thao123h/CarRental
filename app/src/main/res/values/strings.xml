@@ -72,4 +72,14 @@
     <string name="error_network">Lỗi kết nối mạng</string>
     <string name="app_name">Mioto</string>
 
+    <string-array name="fuel_types">
+        <item>PETROL</item>
+        <item>DIESEL</item>
+        <item>ELECTRIC</item>
+    </string-array>
+
+    <string-array name="transmission_types">
+        <item>AUTOMATIC</item>
+        <item>MANUAL</item>
+    </string-array>
 </resources>

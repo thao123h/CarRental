@@ -19,6 +19,7 @@
         tools:ignore="ExtraText">
 
         <activity android:name=".activities.ItemDetailActivity" />
+        <activity android:name=".activities.AddCarActivity" />
 
         <!-- Màn hình khởi động -->
         <activity
