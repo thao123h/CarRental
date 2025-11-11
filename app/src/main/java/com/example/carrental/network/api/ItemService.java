@@ -35,7 +35,7 @@ public interface ItemService {
 
 
     //  Tạo mới một xe ô tô
-    @POST("items/cars")
+    @POST("cars")
     Call<BaseResponse<ItemDTO>> createCar(@Body CarDTO carDTO);
 
     @GET("items/cars")
