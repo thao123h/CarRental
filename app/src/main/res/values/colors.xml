@@ -1,19 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Backgrounds & primary -->
+    <!-- 🎨 Nền & màu chủ đạo -->
     <color name="background">#F6F7F9</color>
     <color name="primary">#27AE60</color>
     <color name="primary_dark">#1E8C4A</color>
 
-    <!-- Text -->
+    <!-- ✏️ Văn bản -->
     <color name="text_primary">#222222</color>
     <color name="text_secondary">#8A8A8A</color>
 
-    <!-- Utility -->
+    <!-- ⚙️ Tiện ích chung -->
     <color name="light_grey">#D8DCE0</color>
+    <color name="grey_light">#E0E0E0</color>
     <color name="green">#2BB673</color>
     <color name="white">#FFFFFF</color>
 
-    <!-- Optional semantic colors -->
+    <!-- 🌿 Teal (màu nhấn cho nút, accent) -->
+    <color name="teal_700">#00796B</color>
+    <color name="teal_500">#009688</color>
+    <color name="teal_200">#80CBC4</color>
+
+    <!-- ❗ Màu cảnh báo / lỗi -->
     <color name="error">#E53935</color>
+    <color name="warning">#FFA726</color>
+    <color name="success">#43A047</color>
+
+    <!-- 💫 Accent (màu phụ nhấn giao diện) -->
+    <color name="accent">#FF4081</color>
 </resources>

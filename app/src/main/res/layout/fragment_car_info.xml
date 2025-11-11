@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fragment_info_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -141,7 +143,7 @@
                     android:layout_marginTop="12dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Fuel type"
+                    android:text="Loại nhiên liệu"
                     android:textSize="13sp"
                     android:textColor="@color/text_secondary"/>
                 <Spinner
@@ -179,11 +181,10 @@
                         android:inputType="text"
                         android:padding="8dp"/>
                 </com.google.android.material.textfield.TextInputLayout>
-
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Card 3: Giá cho thuê (đặt trong trang info để gộp) -->
+        <!-- Card 2: Giá đề xuất -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -213,22 +214,6 @@
                     android:textSize="36sp"
                     android:textColor="@color/green"
                     android:textStyle="bold"/>
-
-                <TextView
-                    android:layout_marginTop="8dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Thu nhập ước tính trong năm"
-                    android:textSize="12sp"
-                    android:textColor="@color/text_secondary"/>
-
-                <!-- Range slider placeholder -->
-                <View
-                    android:layout_marginTop="12dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:background="@drawable/rounded_card"/>
-
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

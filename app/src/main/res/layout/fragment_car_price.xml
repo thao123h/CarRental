@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fragment_price_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -24,22 +26,21 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:text="Giá cho thuê"
                     android:textSize="16sp"
                     android:textColor="@color/text_primary"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
                 <TextView
                     android:layout_marginTop="8dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Nhập mức giá cho thuê theo ngày. Bạn có thể nhập giá cho tự lái và có tài xế (nếu có)."
+                    android:text="Nhập mức giá thuê/ngày cho xe của bạn."
                     android:textColor="@color/text_secondary"
                     android:textSize="13sp"/>
 
-                <!-- Giá thuê - tự lái -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_marginTop="12dp"
                     android:layout_width="match_parent"
@@ -51,11 +52,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
                         android:inputType="number"
-                        android:padding="8dp"
-                        android:imeOptions="actionNext"/>
+                        android:padding="8dp"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Giá thuê có tài xế (tuỳ chọn) -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_marginTop="12dp"
                     android:layout_width="match_parent"
@@ -67,20 +66,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
                         android:inputType="number"
-                        android:padding="8dp"
-                        android:imeOptions="actionDone"/>
+                        android:padding="8dp"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Khuyến nghị / ghi chú -->
-                <TextView
-                    android:layout_marginTop="12dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Gợi ý: tham khảo mức giá đề xuất ở trang trước. Bạn có thể chỉnh sau khi đăng."
-                    android:textColor="@color/text_secondary"
-                    android:textSize="12sp"/>
-
-                <!-- Tùy chọn hiển thị (ví dụ: thương lượng) -->
                 <LinearLayout
                     android:layout_marginTop="12dp"
                     android:layout_width="match_parent"
@@ -90,8 +78,8 @@
 
                     <TextView
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:layout_height="wrap_content"
                         android:text="Cho phép thương lượng"
                         android:textSize="14sp"
                         android:textColor="@color/text_secondary"/>
@@ -99,10 +87,8 @@
                     <Switch
                         android:id="@+id/switch_negotiable"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="false"/>
+                        android:layout_height="wrap_content"/>
                 </LinearLayout>
-
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

@@ -6,14 +6,14 @@
     android:layout_height="match_parent"
     android:background="@color/background">
 
-    <!-- Top toolbar -->
+    <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="0dp"
         android:layout_height="56dp"
         android:background="@android:color/transparent"
         app:title="Thêm xe"
-        app:titleTextAppearance="@style/Toolbar.Title"
+        app:titleTextColor="@color/text_primary"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -40,8 +40,7 @@
             android:tint="@color/primary_dark" />
     </androidx.appcompat.widget.Toolbar>
 
-    <!-- Step indicator (4 steps). Each step has a circle view and a label.
-         The circle views have ids so Activity can toggle bg (active/inactive). -->
+    <!-- Step indicators -->
     <HorizontalScrollView
         android:id="@+id/step_scroll"
         android:layout_width="0dp"
@@ -58,22 +57,23 @@
             android:id="@+id/step_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-            <!-- Step 1: Info -->
+            <!-- Step 1 -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:orientation="vertical"
                 android:gravity="center"
+                android:orientation="vertical"
                 android:padding="6dp">
 
                 <View
                     android:id="@+id/step_circle_info"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
+                    android:backgroundTint="@color/primary"
                     android:background="@drawable/bg_step_active" />
 
                 <TextView
@@ -82,17 +82,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Thông tin"
-                    android:textSize="12sp"
-                    android:textColor="@color/text_secondary"/>
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp" />
             </LinearLayout>
 
-            <!-- Step 2: Images -->
+            <!-- Step 2 -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:orientation="vertical"
                 android:gravity="center"
+                android:orientation="vertical"
                 android:padding="6dp">
 
                 <View
@@ -107,17 +107,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Hình ảnh"
-                    android:textSize="12sp"
-                    android:textColor="@color/text_secondary"/>
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp" />
             </LinearLayout>
 
-            <!-- Step 3: Documents -->
+            <!-- Step 3 -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:orientation="vertical"
                 android:gravity="center"
+                android:orientation="vertical"
                 android:padding="6dp">
 
                 <View
@@ -132,17 +132,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Giấy tờ"
-                    android:textSize="12sp"
-                    android:textColor="@color/text_secondary"/>
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp" />
             </LinearLayout>
 
-            <!-- Step 4: Price -->
+            <!-- Step 4 -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:orientation="vertical"
                 android:gravity="center"
+                android:orientation="vertical"
                 android:padding="6dp">
 
                 <View
@@ -157,26 +157,24 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Giá cho thuê"
-                    android:textSize="12sp"
-                    android:textColor="@color/text_secondary"/>
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp" />
             </LinearLayout>
-
         </LinearLayout>
     </HorizontalScrollView>
 
-    <!-- ViewPager2 to host 4 fragments: fragment_car_info.xml, fragment_car_images.xml,
-         fragment_car_documents.xml, fragment_car_price.xml -->
+    <!-- ViewPager2 -->
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:overScrollMode="never"
         app:layout_constraintTop_toBottomOf="@id/step_scroll"
-        app:layout_constraintBottom_toTopOf="@+id/navigation_bar"
+        app:layout_constraintBottom_toTopOf="@id/navigation_bar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Bottom navigation bar (Prev / Next). On last page Next -> Gửi -->
+    <!-- Bottom navigation -->
     <LinearLayout
         android:id="@+id/navigation_bar"
         android:layout_width="0dp"
@@ -194,8 +192,9 @@
             android:layout_height="56dp"
             android:layout_weight="1"
             android:text="Quay lại"
-            android:backgroundTint="@color/grey_light"
-            android:textAllCaps="false" />
+            android:textAllCaps="false"
+            android:backgroundTint="@color/light_grey"
+            android:textColor="@color/text_primary" />
 
         <Button
             android:id="@+id/btn_next"
@@ -203,9 +202,8 @@
             android:layout_height="56dp"
             android:layout_weight="1"
             android:text="Tiếp theo"
+            android:textAllCaps="false"
             android:backgroundTint="@color/primary"
-            android:textColor="@android:color/white"
-            android:textAllCaps="false" />
+            android:textColor="@android:color/white" />
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
