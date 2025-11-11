@@ -1,12 +1,15 @@
 package com.example.carrental.modals.auth;
 
 
+import java.util.Set;
 
 public class SignupRequest {
 
     private String email;
     private String password;
     private String name;
+    private Boolean isActive = true;
+    private Set<String> stringRoles;
 
     public SignupRequest() {
     }
@@ -39,5 +42,21 @@ public class SignupRequest {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
+    }
+
+    public Set<String> getStringRoles() {
+        return stringRoles;
+    }
+
+    public void setStringRoles(Set<String> stringRoles) {
+        this.stringRoles = stringRoles;
     }
 }

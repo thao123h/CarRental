@@ -38,6 +38,7 @@ public interface ItemService {
     @POST("cars")
     Call<BaseResponse<ItemDTO>> createCar(@Body CarDTO carDTO);
 
-
+    @GET("items/cars")
+    Call<BaseResponse<List<CarDTO>>> getAllCars();
 
 }

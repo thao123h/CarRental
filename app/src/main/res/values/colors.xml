@@ -7,4 +7,14 @@
     <color name="gray_medium">#444444</color>
     <color name="background_light">#F8F9FA</color>
 
+    <color name="brand_red">#E74C3C</color>
+    <color name="brand_green">#16A085</color>
+    <color name="background_light_green">#E8F5E9</color>
+    <color name="border_grey">#D1D1D1</color>
+
+    <color name="status_green_text">#1E8449</color>
+    <color name="status_orange_text">#D84315</color>
+    <color name="status_green_bg">#E8F5E9</color>
+    <color name="status_orange_bg">#FFF3E0</color>
+
 </resources>

@@ -5,12 +5,15 @@ public class LoginRequest {
     private String email;
     private String password;
 
+    private String deviceId;
+
     public LoginRequest() {
     }
 
-    public LoginRequest(String email, String password) {
+    public LoginRequest(String email, String password, String deviceId) {
         this.email = email;
         this.password = password;
+        this.deviceId = deviceId;
     }
 
     public String getEmail() {

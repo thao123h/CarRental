@@ -1,0 +1,60 @@
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:elevation="4dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/imgCar"
+            android:layout_width="100dp"
+            android:layout_height="80dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/placeholder"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <TextView
+            android:id="@+id/txtCarName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Toyota Vios"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            app:layout_constraintStart_toEndOf="@id/imgCar"
+            app:layout_constraintTop_toTopOf="@id/imgCar"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="8dp" />
+
+        <TextView
+            android:id="@+id/txtCarPrice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="500.000đ/ngày"
+            android:textSize="14sp"
+            android:textColor="#666666"
+            app:layout_constraintStart_toStartOf="@id/txtCarName"
+            app:layout_constraintTop_toBottomOf="@id/txtCarName"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/txtCarYear"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Năm: 2022"
+            android:textSize="12sp"
+            android:textColor="#999999"
+            app:layout_constraintStart_toStartOf="@id/txtCarPrice"
+            app:layout_constraintTop_toBottomOf="@id/txtCarPrice"
+            app:layout_constraintBottom_toBottomOf="@id/imgCar"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

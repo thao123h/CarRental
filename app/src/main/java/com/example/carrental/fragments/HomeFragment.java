@@ -1,4 +1,4 @@
-package com.example.carrental.fragment;
+package com.example.carrental.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
