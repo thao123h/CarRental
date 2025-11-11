@@ -60,6 +60,14 @@
         </androidx.cardview.widget.CardView>
 
         <!-- Chọn địa điểm & thời gian -->
+        <Button
+            android:id="@+id/btnMyBookings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_button_green"
+            android:text="My Bookings"
+            android:textColor="@android:color/white" />
+
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -99,26 +107,28 @@
                 android:textColor="#FFF" />
         </LinearLayout>
 
+        <!-- RecyclerView hiển thị danh sách -->
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginLeft="15dp"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:text="Xe ô tô nổi bật"
             android:textColor="#222"
             android:textSize="16sp"
             android:textStyle="bold" />
 
-        <!-- RecyclerView hiển thị danh sách -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvCars"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="222dp"
             android:layout_weight="1"
-            android:paddingBottom="16dp"
-            android:clipToPadding="false" />
+            android:clipToPadding="false"
+            android:paddingBottom="16dp" />
 
     </LinearLayout>
+
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

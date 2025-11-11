@@ -2,12 +2,12 @@ package com.example.carrental.activities;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import com.example.carrental.R;
+import com.example.carrental.fragments.BookingListFragment;
 import com.example.carrental.fragments.HomeFragment;
 import com.example.carrental.fragments.AccountFragment;
 import com.example.carrental.fragments.LoginFragment;
@@ -37,12 +37,14 @@ public class MainActivity extends AppCompatActivity {
         addFragment(new HomeFragment(), "HOME", true);
         addFragment(new AccountFragment(), "ACCOUNT", false);
         addFragment(new LoginFragment(), "LOGIN", false);
+        addFragment(new BookingListFragment(), "BOOKING", false);
 
         bottomNavigation.setOnItemSelectedListener(item -> {
             String tagToShow = null;
             if (item.getItemId() == R.id.nav_home) tagToShow = "HOME";
             else if (item.getItemId() == R.id.nav_login && tokenManager.isLoggedIn()) tagToShow = "ACCOUNT";
             else if (item.getItemId() == R.id.nav_login && !tokenManager.isLoggedIn()) tagToShow = "LOGIN";
+            else if (item.getItemId() == R.id.nav_trip ) tagToShow = "BOOKING";
             if (tagToShow != null) showFragment(tagToShow);
 
             return true;

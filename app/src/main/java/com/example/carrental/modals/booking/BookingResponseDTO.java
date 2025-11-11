@@ -5,6 +5,8 @@ import com.example.carrental.modals.enums.PaymentStatus;
 import com.example.carrental.modals.enums.Status;
 import com.example.carrental.modals.item.ItemDTO;
 
+import java.time.LocalDateTime;
+
 public class BookingResponseDTO {
     private Long id;
     private ItemDTO item;
@@ -19,6 +21,11 @@ public class BookingResponseDTO {
     private String updatedAt;       // đổi từ LocalDateTime → String
 
     // ==== GETTERS ====
+    // Constructor
+    public BookingResponseDTO() {
+    }
+
+    // Getters
     public Long getId() {
         return id;
     }
@@ -58,4 +65,5 @@ public class BookingResponseDTO {
     public String getUpdatedAt() {
         return updatedAt;
     }
+
 }

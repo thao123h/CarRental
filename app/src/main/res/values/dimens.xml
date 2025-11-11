@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Margins & Padding -->
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_medium">12dp</dimen>
+    <dimen name="margin_large">16dp</dimen>
+    <dimen name="margin_xlarge">24dp</dimen>
+
+    <dimen name="padding_small">8dp</dimen>
+    <dimen name="padding_medium">12dp</dimen>
+    <dimen name="padding_large">16dp</dimen>
+
+    <!-- Card -->
+    <dimen name="card_corner_radius">12dp</dimen>
+    <dimen name="card_elevation">2dp</dimen>
+
+    <!-- Button -->
+    <dimen name="button_corner_radius">8dp</dimen>
+    <dimen name="button_padding">14dp</dimen>
+
+    <!-- Status Badge -->
+    <dimen name="badge_corner_radius">16dp</dimen>
+    <dimen name="badge_padding_horizontal">12dp</dimen>
+    <dimen name="badge_padding_vertical">4dp</dimen>
+
+    <!-- Images -->
+    <dimen name="car_image_width">100dp</dimen>
+    <dimen name="car_image_height">80dp</dimen>
+    <dimen name="car_banner_height">200dp</dimen>
+    <dimen name="empty_state_image_size">200dp</dimen>
+
+    <!-- Text Sizes -->
+    <dimen name="text_size_small">12sp</dimen>
+    <dimen name="text_size_normal">14sp</dimen>
+    <dimen name="text_size_medium">16sp</dimen>
+    <dimen name="text_size_large">18sp</dimen>
+    <dimen name="text_size_xlarge">20sp</dimen>
+</resources>
