@@ -34,12 +34,6 @@
             android:name=".activities.CarListActivity"
             android:exported="true" />
 
-
-
-        <!-- Booking Detail Activity -->
-        <activity
-            android:name=".activities.BookingDetailActivity"></activity>
-
         <activity android:name=".activities.ProfileActivity" />
         <activity android:name=".activities.BookingDetailsActivity" />
 

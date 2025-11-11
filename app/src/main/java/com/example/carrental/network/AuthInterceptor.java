@@ -2,6 +2,9 @@ package com.example.carrental.network;
 
 
 import android.content.Context;
+
+import androidx.annotation.NonNull;
+
 import java.io.IOException;
 import okhttp3.Interceptor;
 import okhttp3.Request;
@@ -14,6 +17,7 @@ public class AuthInterceptor implements Interceptor {
         this.context = context;
     }
 
+    @NonNull
     @Override
     public Response intercept(Chain chain) throws IOException {
 
