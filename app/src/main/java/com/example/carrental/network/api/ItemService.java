@@ -43,7 +43,7 @@ public interface ItemService {
     @PATCH("items/cars/{id}")
     Call<BaseResponse<ItemDTO>> updateCar(
             @Path("id") Long id,
-            @Body ItemDTO item // ✅ ĐÃ SỬA: Tham số là ItemDTO
+            @Body CarDTO carDTO
     );
 
     // Xóa một item theo id

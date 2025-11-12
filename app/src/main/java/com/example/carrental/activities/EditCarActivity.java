@@ -1,5 +1,6 @@
 package com.example.carrental.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -37,7 +38,7 @@ import retrofit2.Response;
 public class EditCarActivity extends AppCompatActivity {
 
     // --- Biến lưu trữ ---
-    private Integer carId; // ID của xe cần sửa
+    private long carId; // ID của xe cần sửa
 
     // --- Thông tin Item ---
     private TextInputEditText edtName, edtPrice, edtDeposit, edtAddress, edtDescription;
@@ -58,7 +59,7 @@ public class EditCarActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_car);
 
         // Lấy ID xe từ Intent
-        carId = getIntent().getIntExtra("CAR_ID", -1);
+        carId = getIntent().getLongExtra("CAR_ID", -1);
         if (carId == -1) {
             Toast.makeText(this, "Không tìm thấy thông tin xe!", Toast.LENGTH_LONG).show();
             finish();
@@ -200,12 +201,9 @@ public class EditCarActivity extends AppCompatActivity {
             carDetails.setYear(Integer.parseInt(Objects.requireNonNull(edtYear.getText()).toString().trim()));
             carDetails.setLicensePlate(Objects.requireNonNull(edtLicensePlate.getText()).toString().trim());
             carDetails.setSeats(Integer.parseInt(Objects.requireNonNull(edtSeats.getText()).toString().trim()));
-            // ✅ SỬA LỖI 2: Tạm thời bỏ qua trường Capacity nếu không có trong DTO
-            // carDetails.setCapacity(Integer.parseInt(Objects.requireNonNull(edtCapacity.getText()).toString().trim()));
             carDetails.setTransmission(Transmission.valueOf(spinnerTransmission.getText().toString()));
             carDetails.setFuelType(FuelType.valueOf(spinnerFuelType.getText().toString()));
 
-            // 2. Tạo danh sách ảnh
             List<ItemImageDTO> imageList = new ArrayList<>();
             String imageUrl = Objects.requireNonNull(edtImageUrl.getText()).toString().trim();
             if (!imageUrl.isEmpty()) {
@@ -214,29 +212,31 @@ public class EditCarActivity extends AppCompatActivity {
                 imageList.add(imageDTO);
             }
 
-            // 3. Tạo đối tượng ItemDTO hoàn chỉnh
             ItemDTO itemToUpdate = new ItemDTO();
-            // ✅ SỬA LỖI 3: Chuyển đổi kiểu dữ liệu từ Integer sang Long
             itemToUpdate.setId(Long.valueOf(carId)); // Quan trọng: Gắn ID để server biết cần cập nhật item nào
             itemToUpdate.setName(Objects.requireNonNull(edtName.getText()).toString().trim());
             itemToUpdate.setPrice(Double.parseDouble(Objects.requireNonNull(edtPrice.getText()).toString().trim()));
             itemToUpdate.setDepositAmount(Double.parseDouble(Objects.requireNonNull(edtDeposit.getText()).toString().trim()));
             itemToUpdate.setAddress(Objects.requireNonNull(edtAddress.getText()).toString().trim());
             itemToUpdate.setDescription(Objects.requireNonNull(edtDescription.getText()).toString().trim());
-            itemToUpdate.setCarDTO(carDetails);
-            itemToUpdate.setItemImages(imageList);
+            carDetails.setItemImages(imageList);
+            carDetails.setItem(itemToUpdate);
+
+
 
             // 4. Gọi API để cập nhật
             ItemService itemService = RetrofitClient.createService(this, ItemService.class);
 
             // Chuyển `carId` sang `Long` khi gọi API.
-            itemService.updateCar(Long.valueOf(carId), itemToUpdate).enqueue(new Callback<BaseResponse<ItemDTO>>() {
+            itemService.updateCar(Long.valueOf(carId),carDetails).enqueue(new Callback<BaseResponse<ItemDTO>>() {
                 @Override
                 public void onResponse(@NonNull Call<BaseResponse<ItemDTO>> call, @NonNull Response<BaseResponse<ItemDTO>> response) {
                     if (response.isSuccessful()) {
                         Toast.makeText(EditCarActivity.this, "Cập nhật thành công!", Toast.LENGTH_SHORT).show();
                         // Gửi tín hiệu để CarListActivity tải lại dữ liệu
                         setResult(RESULT_OK);
+                        Intent intent = new Intent(EditCarActivity.this, CarListActivity.class);
+                        startActivity(intent);
                         finish(); // Đóng Activity
                     } else {
                         Toast.makeText(EditCarActivity.this, "Cập nhật thất bại.", Toast.LENGTH_SHORT).show();
