@@ -226,11 +226,9 @@ public class EditCarActivity extends AppCompatActivity {
 
             // 4. Gọi API để cập nhật
             ItemService itemService = RetrofitClient.createService(this, ItemService.class);
-
-            // Chuyển `carId` sang `Long` khi gọi API.
-            itemService.updateCar(Long.valueOf(carId),carDetails).enqueue(new Callback<BaseResponse<ItemDTO>>() {
+            itemService.updateCar(Long.valueOf(carId),carDetails).enqueue(new Callback<BaseResponse>() {
                 @Override
-                public void onResponse(@NonNull Call<BaseResponse<ItemDTO>> call, @NonNull Response<BaseResponse<ItemDTO>> response) {
+                public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
                     if (response.isSuccessful()) {
                         Toast.makeText(EditCarActivity.this, "Cập nhật thành công!", Toast.LENGTH_SHORT).show();
                         // Gửi tín hiệu để CarListActivity tải lại dữ liệu
@@ -245,7 +243,7 @@ public class EditCarActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(@NonNull Call<BaseResponse<ItemDTO>> call, @NonNull Throwable t) {
+                public void onFailure(Call<BaseResponse> call, Throwable t) {
                     Toast.makeText(EditCarActivity.this, "Lỗi kết nối.", Toast.LENGTH_SHORT).show();
                     Log.e("EditCar", "API Failure: " + t.getMessage(), t);
                 }

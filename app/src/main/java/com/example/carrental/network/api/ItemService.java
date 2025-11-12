@@ -41,7 +41,7 @@ public interface ItemService {
 
     //  Cập nhật thông tin xe ô tô
     @PATCH("items/cars/{id}")
-    Call<BaseResponse<ItemDTO>> updateCar(
+    Call<BaseResponse> updateCar(
             @Path("id") Long id,
             @Body CarDTO carDTO
     );
