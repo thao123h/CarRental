@@ -21,25 +21,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Bạn không có chuyến hiện tại"
+        android:text="Bạn chưa đặt xe nào"
         android:textSize="18sp"
         android:textColor="#757575"
         android:textAlignment="center"
         android:gravity="center" />
 
-    <!-- Optional: View History Link -->
-    <TextView
-        android:id="@+id/tvViewHistory"
+    <!-- NEW: Button to go home instead of "Xem lịch sử" -->
+    <Button
+        android:id="@+id/btnGoHome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Xem lịch sử chuyến"
-        android:textSize="14sp"
-        android:textColor="#4CAF50"
+        android:layout_marginTop="24dp"
+        android:text="Về trang chủ"
+        android:textSize="16sp"
+        android:textColor="@android:color/white"
         android:textStyle="bold"
-        android:clickable="true"
-        android:focusable="true"
-        android:padding="8dp"
-        android:background="?attr/selectableItemBackground" />
+        android:background="@drawable/bg_button_green"
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:minWidth="200dp" />
 
 </LinearLayout>

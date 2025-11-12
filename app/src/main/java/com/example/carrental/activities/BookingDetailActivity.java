@@ -24,7 +24,9 @@ import com.example.carrental.modals.booking.UpdateBookingRequest;
 import com.example.carrental.modals.enums.Status;
 import com.example.carrental.modals.item.ItemImageDTO;
 import com.example.carrental.network.RetrofitClient;
+import com.example.carrental.network.TokenManager;
 import com.example.carrental.network.api.BookingService;
+import com.example.carrental.utils.JwtDecoder;
 import com.example.carrental.utils.StatusHelper;
 
 import java.text.NumberFormat;
@@ -37,7 +39,9 @@ import retrofit2.Response;
 
 /**
  * Activity to display booking details
- * Shows different action buttons based on user role (Renter vs Owner)
+ * Shows different action buttons based on user's ACTUAL role in THIS booking
+ *
+ * FIXED: Now detects if current user is OWNER or RENTER of THIS specific booking
  */
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class BookingDetailActivity extends AppCompatActivity {
@@ -67,7 +71,12 @@ public class BookingDetailActivity extends AppCompatActivity {
     private BookingService bookingService;
     private BookingResponseDTO currentBooking;
     private Long bookingId;
-    private String viewMode;
+    private String viewMode; // From intent - which list user came from
+
+    // NEW: Current user info
+    private Long currentUserId;
+    private boolean isCurrentUserRenter = false;
+    private boolean isCurrentUserOwner = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +86,7 @@ public class BookingDetailActivity extends AppCompatActivity {
         initViews();
         setupToolbar();
         initRetrofit();
+        initCurrentUser(); // NEW: Get current user info
         getIntentData();
         loadBookingDetail();
     }
@@ -112,6 +122,21 @@ public class BookingDetailActivity extends AppCompatActivity {
         bookingService = RetrofitClient.createService(this, BookingService.class);
     }
 
+    /**
+     * NEW: Get current user ID from token
+     */
+    private void initCurrentUser() {
+        TokenManager tokenManager = new TokenManager(this);
+        String token = tokenManager.getToken();
+
+        if (token != null && !token.isEmpty()) {
+            currentUserId = JwtDecoder.getUserId(token);
+            Log.d(TAG, "Current User ID: " + currentUserId);
+        } else {
+            Log.e(TAG, "No token found!");
+        }
+    }
+
     private void getIntentData() {
         bookingId = getIntent().getLongExtra("BOOKING_ID", -1);
         viewMode = getIntent().getStringExtra("VIEW_MODE");
@@ -131,6 +156,10 @@ public class BookingDetailActivity extends AppCompatActivity {
                     BaseResponse<BookingResponseDTO> baseResponse = response.body();
                     if (baseResponse.isSuccess() && baseResponse.getData() != null) {
                         currentBooking = baseResponse.getData();
+
+                        // NEW: Determine user's role in THIS booking
+                        determineUserRole();
+
                         displayBookingDetails();
                     } else {
                         showError(baseResponse.getMessage());
@@ -148,6 +177,35 @@ public class BookingDetailActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * NEW: Determine if current user is RENTER or OWNER of this specific booking
+     */
+    private void determineUserRole() {
+        if (currentBooking == null || currentUserId == null) {
+            Log.w(TAG, "Cannot determine role: booking or userId is null");
+            return;
+        }
+
+        // Check if current user is the RENTER
+        if (currentBooking.getRenter() != null &&
+                currentBooking.getRenter().getId() != null) {
+            Long renterId = currentBooking.getRenter().getId();
+            isCurrentUserRenter = renterId.equals(currentUserId);
+            Log.d(TAG, "Is current user RENTER? " + isCurrentUserRenter +
+                    " (RenterID: " + renterId + ", CurrentUserID: " + currentUserId + ")");
+        }
+
+        // Check if current user is the OWNER
+        if (currentBooking.getItem() != null &&
+                currentBooking.getItem().getOwner() != null &&
+                currentBooking.getItem().getOwner().getId() != null) {
+            Long ownerId = currentBooking.getItem().getOwner().getId();
+            isCurrentUserOwner = ownerId.equals(currentUserId);
+            Log.d(TAG, "Is current user OWNER? " + isCurrentUserOwner +
+                    " (OwnerID: " + ownerId + ", CurrentUserID: " + currentUserId + ")");
+        }
+    }
+
     private void displayBookingDetails() {
         if (currentBooking == null) return;
 
@@ -159,11 +217,15 @@ public class BookingDetailActivity extends AppCompatActivity {
             String carName = currentBooking.getItem().getName();
             tvCarName.setText(carName != null ? carName : "N/A");
 
-            // Set license plate
+            // Set license plate - FIXED
+            String licensePlate = "N/A";
             if (currentBooking.getItem().getCarDTO() != null) {
-                String licensePlate = currentBooking.getItem().getCarDTO().getLicensePlate();
-                tvLicensePlate.setText(licensePlate != null ? licensePlate : "N/A");
+                String plate = currentBooking.getItem().getCarDTO().getLicensePlate();
+                if (plate != null && !plate.trim().isEmpty()) {
+                    licensePlate = plate;
+                }
             }
+            tvLicensePlate.setText(licensePlate);
 
             // Set price
             Double price = currentBooking.getItem().getPrice();
@@ -208,7 +270,7 @@ public class BookingDetailActivity extends AppCompatActivity {
         // Set status badge
         setStatusBadge();
 
-        // Setup action buttons
+        // Setup action buttons based on ACTUAL role
         setupActionButtons();
     }
 
@@ -255,6 +317,9 @@ public class BookingDetailActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * FIXED: Setup buttons based on user's ACTUAL role in THIS booking
+     */
     private void setupActionButtons() {
         btnAccept.setVisibility(View.GONE);
         btnReject.setVisibility(View.GONE);
@@ -262,21 +327,29 @@ public class BookingDetailActivity extends AppCompatActivity {
 
         Status status = currentBooking.getStatus();
 
-        if ("OWNER".equals(viewMode)) {
-            // Owner view - show Accept/Reject buttons for PENDING bookings
+        // NEW: Check ACTUAL role, not just viewMode
+        if (isCurrentUserOwner) {
+            // User IS the owner of this car
             if (StatusHelper.canOwnerRespond(status)) {
                 btnAccept.setVisibility(View.VISIBLE);
                 btnReject.setVisibility(View.VISIBLE);
 
                 btnAccept.setOnClickListener(v -> showAcceptDialog());
                 btnReject.setOnClickListener(v -> showRejectDialog());
+
+                Log.d(TAG, "Showing OWNER buttons (Accept/Reject)");
             }
-        } else {
-            // Renter view - show Cancel button for PENDING/NEGOTIATION bookings
+        } else if (isCurrentUserRenter) {
+            // User IS the renter of this booking
             if (StatusHelper.canRenterCancel(status)) {
                 btnCancel.setVisibility(View.VISIBLE);
                 btnCancel.setOnClickListener(v -> showCancelDialog());
+
+                Log.d(TAG, "Showing RENTER button (Cancel)");
             }
+        } else {
+            // User is neither owner nor renter - show no buttons
+            Log.d(TAG, "User is neither OWNER nor RENTER of this booking - no action buttons");
         }
     }
 

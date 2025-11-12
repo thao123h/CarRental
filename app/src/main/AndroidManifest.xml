@@ -36,6 +36,12 @@
 
         <activity android:name=".activities.ProfileActivity" />
         <activity android:name=".activities.BookingDetailsActivity" />
+        <activity
+            android:name=".activities.BookingDetailActivity"
+            android:label="Chi tiết đơn"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:exported="false"
+            tools:targetApi="26" />
 
     </application>
 </manifest>
