@@ -2,6 +2,7 @@ package com.example.carrental.adapters;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,17 +15,33 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.carrental.R;
 import com.example.carrental.modals.item.CarDTO;
+import com.example.carrental.modals.item.ItemDTO;
 
 import java.util.List;
 
 public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
 
     private final Context context;
-    private final List<CarDTO> carList;
+    private final List<ItemDTO> carList;
+    private int longPressedPosition = -1; // Biến để lưu vị trí item được nhấn giữ
 
-    public CarAdapter(Context context, List<CarDTO> carList) {
+    public CarAdapter(Context context, List<ItemDTO> carList) {
         this.context = context;
         this.carList = carList;
+    }
+
+    // Getter và Setter cho vị trí
+    public int getLongPressedPosition() {
+        return longPressedPosition;
+    }
+
+    public void setLongPressedPosition(int longPressedPosition) {
+        this.longPressedPosition = longPressedPosition;
+    }
+
+    // Getter để lấy danh sách xe từ Activity
+    public List<ItemDTO> getCarList() {
+        return carList;
     }
 
     @NonNull
@@ -36,15 +53,29 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull CarViewHolder holder, int position) {
-        CarDTO car = carList.get(position);
+        ItemDTO car = carList.get(position);
 
-        Log.d("Adapter", "Bind xe: " + car.getBrand() + " " + car.getModel());
+        if (car == null) {
+            Log.e("Adapter", "ItemDTO ở vị trí " + position + " bị null");
+            return;
+        }
 
-        holder.txtCarName.setText(car.getBrand() + " " + car.getModel());
-        holder.txtCarPrice.setText("Biển số: " + (car.getLicensePlate() != null ? car.getLicensePlate() : "?"));
+        if (car.getCarDTO() == null) {
+            Log.e("Adapter", "CarDTO ở vị trí " + position + " bị null, id = " + car.getId());
+            holder.txtCarName.setText("Dữ liệu xe không hợp lệ");
+            holder.txtCarPrice.setText("");
+            holder.txtCarYear.setText("");
+            holder.imgCar.setImageResource(R.drawable.placeholder);
+            return;
+        }
 
-        if (car.getYear() != null) {
-            holder.txtCarYear.setText("Năm: " + car.getYear());
+        Log.d("Adapter", "Bind xe: " + car.getCarDTO().getBrand() + " " + car.getCarDTO().getModel());
+
+        holder.txtCarName.setText(car.getCarDTO().getBrand() + " " +car.getCarDTO().getModel());
+        holder.txtCarPrice.setText("Biển số: " + (car.getCarDTO().getLicensePlate() != null ? car.getCarDTO().getLicensePlate() : "?"));
+
+        if (car.getCarDTO().getYear() != null) {
+            holder.txtCarYear.setText("Năm: " + car.getCarDTO().getYear());
         } else {
             holder.txtCarYear.setText("Năm: ?");
         }
@@ -63,6 +94,14 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
         } else {
             holder.imgCar.setImageResource(R.drawable.placeholder);
         }
+
+        // Xử lý sự kiện nhấn giữ lâu
+        holder.itemView.setOnLongClickListener(v -> {
+            // Lưu lại vị trí của item được nhấn
+            setLongPressedPosition(holder.getAdapterPosition());
+            // Trả về false để sự kiện context menu được tiếp tục xử lý
+            return false;
+        });
     }
 
     @Override
@@ -70,7 +109,8 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
         return carList.size();
     }
 
-    public static class CarViewHolder extends RecyclerView.ViewHolder {
+    // ViewHolder cần implement View.OnCreateContextMenuListener
+    public static class CarViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
         ImageView imgCar;
         TextView txtCarName, txtCarPrice, txtCarYear;
 
@@ -80,6 +120,16 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
             txtCarName = itemView.findViewById(R.id.txtCarName);
             txtCarPrice = itemView.findViewById(R.id.txtCarPrice);
             txtCarYear = itemView.findViewById(R.id.txtCarYear);
+
+            // Đăng ký context menu cho itemView
+            itemView.setOnCreateContextMenuListener(this);
+        }
+
+        // Tạo menu (chúng ta sẽ định nghĩa các item trong Activity)
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            // Dòng này rất quan trọng để activity có thể thêm item vào menu
+            // Bạn có thể để trống hoặc thêm các item mặc định tại đây nếu muốn
         }
     }
 }

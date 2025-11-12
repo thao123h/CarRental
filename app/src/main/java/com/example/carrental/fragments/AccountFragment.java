@@ -16,10 +16,12 @@ import androidx.fragment.app.Fragment;
 
 // Import các class của bạn
 import com.example.carrental.R;
+import com.example.carrental.activities.CarListActivity;
 import com.example.carrental.activities.ProfileActivity;
 import com.example.carrental.modals.BaseResponse;
 import com.example.carrental.modals.auth.UserDTO;
 import com.example.carrental.network.RetrofitClient;
+import com.example.carrental.network.TokenManager;
 import com.example.carrental.network.api.AuthApiService;
 
 import retrofit2.Call;
@@ -37,6 +39,7 @@ public class AccountFragment extends Fragment {
 
     // Các mục
     private View itemRegisterCar, itemFavoriteCars, itemPersonalInfo;
+    private TokenManager token = null;
 
     @Nullable
     @Override
@@ -52,7 +55,7 @@ public class AccountFragment extends Fragment {
         // Khởi tạo ApiService
         // Dùng getActivity() để lấy Context
         apiService = RetrofitClient.createService(getActivity(), AuthApiService.class);
-
+       token =  new TokenManager(requireContext());
         // Ánh xạ Header
         cardProfileHeader = view.findViewById(R.id.cardProfileHeader);
         tvName = view.findViewById(R.id.tvName);
@@ -65,7 +68,15 @@ public class AccountFragment extends Fragment {
 
         // --- Cài đặt dữ liệu cho 3 mục ---
         // (Bạn phải dùng hàm setupItem)
-        setupItem(itemRegisterCar, "Đăng ký cho thuê xe", R.drawable.ic_document);
+        if(token.getRoles().contains("RENTER")){
+            setupItem(itemRegisterCar, "Đăng ký cho thuê xe", R.drawable.ic_document);
+
+        }
+        else if (token.getRoles().contains("OWNER")){
+            setupItem(itemRegisterCar, "Xe của tôi", R.drawable.ic_document);
+            Intent intent = new Intent(requireContext(), CarListActivity.class);
+        }
+
         setupItem(itemFavoriteCars, "Xe yêu thích", R.drawable.ic_heart);
         setupItem(itemPersonalInfo, "Thông tin cá nhân", R.drawable.ic_profile);
 
@@ -85,6 +96,11 @@ public class AccountFragment extends Fragment {
 
         // Click vào 2 mục còn lại (hiện tại chỉ báo Toast)
         itemRegisterCar.setOnClickListener(v -> {
+            if(token.getRoles().contains("OWNER")){
+                Intent intent = new Intent(requireContext(), CarListActivity.class);
+                startActivity(intent);
+            }
+            else
             Toast.makeText(getActivity(), "Mở màn hình Đăng ký xe", Toast.LENGTH_SHORT).show();
         });
 
