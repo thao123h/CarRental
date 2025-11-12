@@ -1,5 +1,6 @@
 package com.example.carrental.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.example.carrental.R;
 import com.example.carrental.modals.BaseResponse;
+import com.example.carrental.modals.enums.Category;
 import com.example.carrental.modals.enums.FuelType;
 import com.example.carrental.modals.enums.Transmission;
 import com.example.carrental.modals.item.CarDTO;
@@ -74,7 +76,6 @@ public class AddCarActivity extends AppCompatActivity {
         edtImageUrl = findViewById(R.id.edtImageUrl);
         btnAddCar = findViewById(R.id.btnAddCar);
         btnCancel = findViewById(R.id.btnCancel);
-
         setupSpinners();
         setupListeners();
     }
@@ -130,6 +131,7 @@ public class AddCarActivity extends AppCompatActivity {
             newItemToPost.setDepositAmount(Double.parseDouble(edtDeposit.getText().toString().trim()));
             newItemToPost.setAddress(edtAddress.getText().toString().trim());
             newItemToPost.setDescription(edtDescription.getText().toString().trim());
+            newItemToPost.setCategory(Category.CAR);
 
             List<ItemImageDTO> imageList = new ArrayList<>();
             String imageUrl = edtImageUrl.getText().toString().trim();
@@ -139,7 +141,6 @@ public class AddCarActivity extends AppCompatActivity {
                 imageList.add(imageDTO);
             }
 
-            newItemToPost.setItemImages(imageList); // Gắn danh sách ảnh vào ItemDTO
             // 1. Tạo đối tượng CarDTO (thông tin chi tiết xe)
             CarDTO carDetails = new CarDTO();
             carDetails.setBrand(edtBrand.getText().toString().trim());
@@ -150,7 +151,32 @@ public class AddCarActivity extends AppCompatActivity {
             carDetails.setTransmission(Transmission.valueOf(spinnerTransmission.getText().toString()));
             carDetails.setFuelType(FuelType.valueOf(spinnerFuelType.getText().toString()));
             carDetails.setItem(newItemToPost);
+            carDetails.setItemImages(imageList);
 
+            // 🧾 LOG TOÀN BỘ GIÁ TRỊ
+            Log.d("AddCar", "=== ITEM INFO ===");
+            Log.d("AddCar", "Name: " + newItemToPost.getName());
+            Log.d("AddCar", "Price: " + newItemToPost.getPrice());
+            Log.d("AddCar", "Deposit: " + newItemToPost.getDepositAmount());
+            Log.d("AddCar", "Address: " + newItemToPost.getAddress());
+            Log.d("AddCar", "Description: " + newItemToPost.getDescription());
+
+            Log.d("AddCar", "=== CAR DETAILS ===");
+            Log.d("AddCar", "Brand: " + carDetails.getBrand());
+            Log.d("AddCar", "Model: " + carDetails.getModel());
+            Log.d("AddCar", "Year: " + carDetails.getYear());
+            Log.d("AddCar", "License Plate: " + carDetails.getLicensePlate());
+            Log.d("AddCar", "Seats: " + carDetails.getSeats());
+            Log.d("AddCar", "Transmission: " + carDetails.getTransmission());
+            Log.d("AddCar", "Fuel Type: " + carDetails.getFuelType());
+
+            if (!imageList.isEmpty()) {
+                for (ItemImageDTO img : imageList) {
+                    Log.d("AddCar", "Image URL: " + img.getImageUrl());
+                }
+            } else {
+                Log.d("AddCar", "No images provided.");
+            }
 
 
             // 4. Gọi API để gửi ItemDTO lên server
@@ -163,7 +189,11 @@ public class AddCarActivity extends AppCompatActivity {
                         Toast.makeText(AddCarActivity.this, "Đăng tin thành công!", Toast.LENGTH_SHORT).show();
                         ItemDTO createdItem = response.body().getData();
                         Log.d("AddCar", "Đã tạo item mới với ID: " + createdItem.getId());
-                        finish(); // Đóng Activity và quay lại danh sách
+                        Intent intent = new Intent(AddCarActivity.this, CarListActivity.class);
+                        startActivity(intent);
+                        finish(); // nếu bạn muốn đóng Activity hiện tại
+
+//                        finish(); // Đóng Activity và quay lại danh sách
                     } else {
                         String errorMessage = "Đăng tin thất bại!";
                         if (response.errorBody() != null) {
