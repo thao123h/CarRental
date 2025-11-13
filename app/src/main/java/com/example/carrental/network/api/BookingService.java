@@ -34,8 +34,8 @@ public interface BookingService {
     Call<BaseResponse<BookingResponseDTO[]>> getAllBookingsByRenter();
 
     // Lấy tất cả booking theo ownerId (người cho thuê)
-    @GET("bookings/owner/{ownerId}")
-    Call<BaseResponse<BookingResponseDTO[]>> getAllBookingsByOwnerId(@Path("ownerId") Long ownerId);
+    @GET("bookings/owner")
+    Call<BaseResponse<BookingResponseDTO[]>> getAllBookingsByOwner();
 
     // Tạo booking mới
     @POST("bookings")

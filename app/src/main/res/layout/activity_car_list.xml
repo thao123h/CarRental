@@ -33,4 +33,20 @@
         android:clipToPadding="false"
         android:paddingBottom="8dp"/>
 
+    <!-- Nút thêm mới (+) -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_input_add"
+        android:contentDescription="Thêm liên hệ"
+        android:tint="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="16dp"
+        app:elevation="8dp" />
+
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,12 +3,14 @@ package com.example.carrental.modals.item;
 import com.example.carrental.modals.auth.UserDTO;
 import com.example.carrental.modals.enums.AvailabilityStatus;
 import com.example.carrental.modals.enums.Category;
+import com.google.gson.annotations.SerializedName;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class ItemDTO {
     private Long id;
+
     private UserDTO owner;
 
     private String name;
@@ -71,9 +73,9 @@ public class ItemDTO {
         return createdAt;
     }
 
-    public CarDTO getCarDTO() {
-        return carDTO;
-    }
+
+    @SerializedName("itemDetail")
+    private CarDTO carDTO;
 
     private Double depositAmount;
 
@@ -86,5 +88,66 @@ public class ItemDTO {
 
     private LocalDateTime createdAt;
 
-    private  CarDTO carDTO;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setOwner(UserDTO owner) {
+        this.owner = owner;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public void setItemValue(Double itemValue) {
+        this.itemValue = itemValue;
+    }
+
+    public void setLatePrice(Double latePrice) {
+        this.latePrice = latePrice;
+    }
+
+    public void setDepositAmount(Double depositAmount) {
+        this.depositAmount = depositAmount;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public CarDTO getCarDTO() {
+        return carDTO;
+    }
+
+    public void setAvailabilityStatus(AvailabilityStatus availabilityStatus) {
+        this.availabilityStatus = availabilityStatus;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public void setItemImages(List<ItemImageDTO> itemImages) {
+        this.itemImages = itemImages;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setCarDTO(CarDTO carDTO) {
+        this.carDTO = carDTO;
+    }
+
+
+
 }
