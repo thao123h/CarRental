@@ -50,6 +50,7 @@ public class BookingListFragment extends Fragment implements BookingAdapter.OnBo
     public enum ViewMode {
         RENTER, OWNER
     }
+     TokenManager tokenManager = null;
 
     // UI
     private Toolbar toolbar;
@@ -63,10 +64,10 @@ public class BookingListFragment extends Fragment implements BookingAdapter.OnBo
     private BookingAdapter adapter;
     private BookingService bookingService;
     private ViewMode currentViewMode = ViewMode.RENTER;
-    private TokenManager tokenManager;
+
 
     // User info
-    private Long userId;
+
     private boolean hasRenterRole = false;
     private boolean hasOwnerRole = false;
 
@@ -120,26 +121,27 @@ public class BookingListFragment extends Fragment implements BookingAdapter.OnBo
     }
 
     private void initUserInfo() {
+
         tokenManager = new TokenManager(requireContext());
         String token = tokenManager.getToken();
-
         if (token == null || token.isEmpty()) {
             Toast.makeText(requireContext(), "No token found. Please login.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        userId = JwtDecoder.getUserId(token);
-        hasRenterRole = JwtDecoder.hasRenterRole(token);
-        hasOwnerRole = JwtDecoder.hasOwnerRole(token);
+        hasRenterRole = tokenManager.getRoles().contains("RENTER");
+        hasOwnerRole = tokenManager.getRoles().contains("OWNER");
 
-        Log.d(TAG, "User ID: " + userId);
         Log.d(TAG, "Has RENTER role: " + hasRenterRole);
         Log.d(TAG, "Has OWNER role: " + hasOwnerRole);
 
+
         if (hasRenterRole) {
             currentViewMode = ViewMode.RENTER;
+            Toast.makeText(requireContext(), "role renter", Toast.LENGTH_SHORT).show();
         } else if (hasOwnerRole) {
             currentViewMode = ViewMode.OWNER;
+            Toast.makeText(requireContext(), "role owner", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(requireContext(), "No valid role found", Toast.LENGTH_SHORT).show();
             return;
@@ -203,11 +205,18 @@ public class BookingListFragment extends Fragment implements BookingAdapter.OnBo
         if (currentViewMode == ViewMode.RENTER) {
             call = bookingService.getAllBookingsByRenter();
         } else {
-            if (userId == null) {
-                showError("Không thể tải đơn của chủ xe: Không tìm thấy userId");
-                return;
+
+            if(hasOwnerRole){
+                call = bookingService.getAllBookingsByOwner();
+                Log.d("role", "role owner");
+                Toast.makeText(requireContext(), "role owner", Toast.LENGTH_SHORT).show();
             }
-            call = bookingService.getAllBookingsByOwnerId(userId);
+           else {
+                call = bookingService.getAllBookingsByRenter();
+                Log.d("role", "renter");
+                Toast.makeText(requireContext(), "role renter", Toast.LENGTH_SHORT).show();
+            }
+
         }
 
         call.enqueue(new Callback<BaseResponse<BookingResponseDTO[]>>() {

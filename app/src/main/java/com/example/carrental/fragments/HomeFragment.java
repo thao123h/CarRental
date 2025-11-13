@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import android.util.Log;
 
 public class HomeFragment extends Fragment implements ItemAdapter.OnItemActionListener {
     private RecyclerView rv;
@@ -105,6 +106,22 @@ public class HomeFragment extends Fragment implements ItemAdapter.OnItemActionLi
 
                 if (response.isSuccessful() && response.body() != null) {
                     items = response.body().getData();
+                    Log.d("HomeFragment", "Số lượng item trả về: " + (items != null ? items.size() : 0));
+                    for (int i = 0; i < items.size(); i++) {
+                        ItemDTO item = items.get(i);
+                        Log.d("HomeFragment", String.format(
+                                "Item %d: id=%s, name=%s, price=%.0f, address=%s, images=%s",
+                                i + 1,
+                                item.getId(),
+                                item.getName(),
+                                item.getPrice(),
+                                item.getAddress(),
+                                (item.getItemImages() != null && !item.getItemImages().isEmpty())
+                                        ? item.getItemImages().get(0).getImageUrl()
+                                        : "no image"
+                        ));
+                    }
+
                     adapter.setData(items);
                 } else {
                     Toast.makeText(requireContext(), "Load error: " + response.code(), Toast.LENGTH_SHORT).show();
