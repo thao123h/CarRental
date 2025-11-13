@@ -60,13 +60,6 @@
         </androidx.cardview.widget.CardView>
 
         <!-- Chọn địa điểm & thời gian -->
-        <Button
-            android:id="@+id/btnMyBookings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_button_green"
-            android:text="My Bookings"
-            android:textColor="@android:color/white" />
 
         <LinearLayout
             android:orientation="vertical"
