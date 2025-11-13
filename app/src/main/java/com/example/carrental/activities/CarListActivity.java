@@ -19,12 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.carrental.R;
 import com.example.carrental.adapters.CarAdapter;
 import com.example.carrental.modals.BaseResponse;
-import com.example.carrental.modals.item.CarDTO;
 import com.example.carrental.modals.item.ItemDTO;
 import com.example.carrental.network.RetrofitClient;
 import com.example.carrental.network.api.ItemService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -58,7 +56,7 @@ public class CarListActivity extends AppCompatActivity {
 
         FloatingActionButton btnAdd = findViewById(R.id.btnAdd);
         btnAdd.setOnClickListener(v -> {
-            Intent intent = new Intent(CarListActivity.this, AddCarActivity.class);
+            Intent intent = new Intent(CarListActivity.this, AddCarActivityD.class);
             // ✅ Sử dụng startActivityForResult để có thể tải lại danh sách sau khi thêm thành công
             startActivityForResult(intent, ADD_CAR_REQUEST_CODE);
         });

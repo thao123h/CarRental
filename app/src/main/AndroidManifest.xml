@@ -35,7 +35,7 @@
             android:exported="true" />
 
                 <activity
-                    android:name=".activities.AddCarActivity"
+                    android:name=".activities.AddCarActivityD"
                     android:exported="true" />
 
         <activity

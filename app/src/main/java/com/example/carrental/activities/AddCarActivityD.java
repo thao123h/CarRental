@@ -33,7 +33,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AddCarActivity extends AppCompatActivity {
+public class AddCarActivityD extends AppCompatActivity {
 
     // --- Thông tin Item ---
     private TextInputEditText edtName, edtPrice, edtDeposit, edtAddress, edtDescription;
@@ -52,7 +52,7 @@ public class AddCarActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_car);
+        setContentView(R.layout.activity_add_car_d);
 
         // --- Ánh xạ View cho Item ---
         edtName = findViewById(R.id.edtName);
@@ -186,10 +186,10 @@ public class AddCarActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<BaseResponse<ItemDTO>> call, Response<BaseResponse<ItemDTO>> response) {
                     if (response.isSuccessful() && response.body() != null) {
-                        Toast.makeText(AddCarActivity.this, "Đăng tin thành công!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddCarActivityD.this, "Đăng tin thành công!", Toast.LENGTH_SHORT).show();
                         ItemDTO createdItem = response.body().getData();
                         Log.d("AddCar", "Đã tạo item mới với ID: " + createdItem.getId());
-                        Intent intent = new Intent(AddCarActivity.this, CarListActivity.class);
+                        Intent intent = new Intent(AddCarActivityD.this, CarListActivity.class);
                         startActivity(intent);
                         finish(); // nếu bạn muốn đóng Activity hiện tại
 
@@ -204,14 +204,14 @@ public class AddCarActivity extends AppCompatActivity {
                             }
                         }
                         Log.e("AddCar", "API Error: " + response.code() + " - " + errorMessage);
-                        Toast.makeText(AddCarActivity.this, "Lỗi: " + errorMessage, Toast.LENGTH_LONG).show();
+                        Toast.makeText(AddCarActivityD.this, "Lỗi: " + errorMessage, Toast.LENGTH_LONG).show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<BaseResponse<ItemDTO>> call, Throwable t) {
                     Log.e("AddCar", "Lỗi khi gọi API: " + t.getMessage(), t);
-                    Toast.makeText(AddCarActivity.this, "Không thể kết nối đến máy chủ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddCarActivityD.this, "Không thể kết nối đến máy chủ", Toast.LENGTH_SHORT).show();
                 }
             });
 
