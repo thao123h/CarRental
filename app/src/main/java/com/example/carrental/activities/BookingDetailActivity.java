@@ -217,15 +217,11 @@ public class BookingDetailActivity extends AppCompatActivity {
             String carName = currentBooking.getItem().getName();
             tvCarName.setText(carName != null ? carName : "N/A");
 
-            // Set license plate - FIXED
-            String licensePlate = "N/A";
+            // Set license plate
             if (currentBooking.getItem().getCarDTO() != null) {
-                String plate = currentBooking.getItem().getCarDTO().getLicensePlate();
-                if (plate != null && !plate.trim().isEmpty()) {
-                    licensePlate = plate;
-                }
+                String licensePlate = currentBooking.getItem().getCarDTO().getLicensePlate();
+                tvLicensePlate.setText(licensePlate != null ? licensePlate : "N/A");
             }
-            tvLicensePlate.setText(licensePlate);
 
             // Set price
             Double price = currentBooking.getItem().getPrice();
