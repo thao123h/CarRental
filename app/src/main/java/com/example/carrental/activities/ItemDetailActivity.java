@@ -226,7 +226,8 @@ public class ItemDetailActivity extends AppCompatActivity {
             String startDateStr = dateFormat.format(startDate.getTime());
             String endDateStr = dateFormat.format(endDate.getTime());
             String totalPrice = tvEstimatedTotal.getText().toString();
-            // Tạo Intent gửi sang BookingDetailsActivity
+            // Tạo Intent
+            // gửi sang BookingDetailsActivity
             Intent intent = new Intent(ItemDetailActivity.this, BookingDetailsActivity.class);
             intent.putExtra("car_id", item.getId());
             intent.putExtra("car_name", item.getName());

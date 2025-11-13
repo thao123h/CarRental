@@ -103,7 +103,7 @@ public class SignupFragment extends Fragment {
         apiService.registerUser(signupRequest).enqueue(new Callback<BaseResponse<MessageResponse>>() {
             @Override
             public void onResponse(Call<BaseResponse<MessageResponse>> call, Response<BaseResponse<MessageResponse>> response) {
-                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                if (response.isSuccessful()) {
                     Toast.makeText(getContext(), "Account created! Please sign in.", Toast.LENGTH_LONG).show();
 
                     // Chuyển sang LoginFragment sau khi signup thành công

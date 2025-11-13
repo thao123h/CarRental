@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 
 // Import các class của bạn
 import com.example.carrental.R;
+import com.example.carrental.activities.AddCarActivity;
 import com.example.carrental.activities.CarListActivity;
 import com.example.carrental.activities.ProfileActivity;
 import com.example.carrental.modals.BaseResponse;
@@ -96,13 +97,16 @@ public class AccountFragment extends Fragment {
 
         // Click vào 2 mục còn lại (hiện tại chỉ báo Toast)
         itemRegisterCar.setOnClickListener(v -> {
+
             if(token.getRoles().contains("OWNER")){
                 Intent intent = new Intent(requireContext(), CarListActivity.class);
                 startActivity(intent);
             }
-            else
-            Toast.makeText(getActivity(), "Mở màn hình Đăng ký xe", Toast.LENGTH_SHORT).show();
+            else{
+                Intent intent = new Intent(requireContext(), AddCarActivity.class);
+            startActivity(intent);}
         });
+
 
         itemFavoriteCars.setOnClickListener(v -> {
             Toast.makeText(getActivity(), "Mở màn hình Xe yêu thích", Toast.LENGTH_SHORT).show();
