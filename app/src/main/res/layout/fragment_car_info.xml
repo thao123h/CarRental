@@ -72,15 +72,20 @@
                     android:layout_marginTop="6dp"/>
 
                 <!-- Model spinner -->
-                <TextView
-                    android:id="@+id/car_name"
-                    android:layout_marginTop="12dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" Tên xe *"
-                    android:textSize="13sp"
-                    android:textColor="@color/text_secondary"/>
 
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Tên xe *">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/car_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="13sp"
+                        android:textColor="@color/text_secondary"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Year and seats row -->
                 <LinearLayout

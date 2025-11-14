@@ -18,16 +18,19 @@ import com.example.carrental.modals.item.CarDTO;
 import com.example.carrental.modals.item.ItemDTO;
 
 import java.util.List;
+import java.util.ArrayList;
 
 public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
 
     private final Context context;
     private final List<ItemDTO> carList;
     private int longPressedPosition = -1; // Biến để lưu vị trí item được nhấn giữ
+    private final List<ItemDTO> originalList;
 
     public CarAdapter(Context context, List<ItemDTO> carList) {
         this.context = context;
         this.carList = carList;
+        this.originalList = new ArrayList<>(carList); // lưu bản gốc để lọc
     }
 
     // Getter và Setter cho vị trí
@@ -132,4 +135,24 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
             // Bạn có thể để trống hoặc thêm các item mặc định tại đây nếu muốn
         }
     }
+
+    public void filterByName(String query) {
+        carList.clear();
+        if (query == null || query.trim().isEmpty()) {
+            carList.addAll(originalList);
+        } else {
+            String lowerQuery = query.toLowerCase();
+            for (ItemDTO item : originalList) {
+                String name = item.getName() != null ? item.getName().toLowerCase() : "";
+                String brand = item.getCarDTO() != null && item.getCarDTO().getBrand() != null ? item.getCarDTO().getBrand().toLowerCase() : "";
+                String model = item.getCarDTO() != null && item.getCarDTO().getModel() != null ? item.getCarDTO().getModel().toLowerCase() : "";
+
+                if (name.contains(lowerQuery) || brand.contains(lowerQuery) || model.contains(lowerQuery)) {
+                    carList.add(item);
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+
 }

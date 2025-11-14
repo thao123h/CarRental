@@ -23,8 +23,21 @@ import com.example.carrental.modals.item.ItemDTO;
 import com.example.carrental.network.RetrofitClient;
 import com.example.carrental.network.api.ItemService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
+import android.widget.ImageButton;
+import android.widget.EditText;
+import android.text.TextWatcher;
+import android.text.Editable;
 
 import java.util.List;
+import java.util.ArrayList;
+import java.time.LocalDateTime;
+import com.example.carrental.modals.enums.AvailabilityStatus;
+import com.example.carrental.modals.enums.Category;
+import com.example.carrental.modals.enums.Transmission;
+import com.example.carrental.modals.enums.FuelType;
+
+
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -60,6 +73,30 @@ public class CarListActivity extends AppCompatActivity {
             // ✅ Sử dụng startActivityForResult để có thể tải lại danh sách sau khi thêm thành công
             startActivityForResult(intent, ADD_CAR_REQUEST_CODE);
         });
+        //Gán sự kiện nút quay lại
+        ImageButton btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(v -> {
+            finish(); // Quay lại màn hình trước (MainActivity)
+        });
+
+        //Gán sự kiện ô tìm kiếm
+        EditText etSearchCar = findViewById(R.id.etSearchCar);
+        etSearchCar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (carAdapter != null) {
+                    carAdapter.filterByName(s.toString());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+
 
     }
 
