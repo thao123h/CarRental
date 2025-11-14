@@ -4,8 +4,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -42,7 +46,9 @@ public class AddCarActivity extends AppCompatActivity {
     private Button btnPrev, btnNext;
     private FormPagerAdapter adapter;
     private ItemService api;
-    public static TextInputEditText  carName;
+
+    private static final String TAG = "AddCarActivity";
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +68,7 @@ public class AddCarActivity extends AppCompatActivity {
 
         adapter = new FormPagerAdapter(this, pages);
         viewPager.setAdapter(adapter);
-        viewPager.setUserInputEnabled(false);
+        viewPager.setUserInputEnabled(false); // disable swipe manually
 
         updateButtons();
 
@@ -78,7 +84,10 @@ public class AddCarActivity extends AppCompatActivity {
             int pos = viewPager.getCurrentItem();
             if (pos < adapter.getItemCount() - 1) {
                 Fragment f = adapter.getFragmentAt(pos);
-                if (f instanceof PageFragment && !((PageFragment) f).validatePage()) return;
+                if (f instanceof PageFragment && !((PageFragment) f).validatePage()) {
+                    Toast.makeText(this, "Vui lòng điền đủ thông tin ở bước này", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 viewPager.setCurrentItem(pos + 1);
                 updateButtons();
             } else {
@@ -93,9 +102,6 @@ public class AddCarActivity extends AppCompatActivity {
         btnNext.setText(pos == adapter.getItemCount() - 1 ? "Hoàn tất" : "Tiếp theo");
     }
 
-    // ======================================
-    // 🔹 Gửi dữ liệu lên server
-    // ======================================
     private void submitAll() {
         try {
             CarDTO car = new CarDTO();
@@ -109,11 +115,26 @@ public class AddCarActivity extends AppCompatActivity {
                     if (!pf.validatePage()) {
                         viewPager.setCurrentItem(i);
                         updateButtons();
+                        Toast.makeText(this, "Vui lòng kiểm tra lại thông tin", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    pf.putData(car);
+                    try {
+                        pf.putData(car);
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error in putData at page " + i, e);
+                        Toast.makeText(this, "Lỗi dữ liệu: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        viewPager.setCurrentItem(i);
+                        updateButtons();
+                        return;
+                    }
                 }
             }
+
+            // Debug print JSON
+            com.google.gson.Gson gson = new com.google.gson.GsonBuilder()
+                    .setPrettyPrinting()
+                    .create();
+            Log.d(TAG, gson.toJson(car));
 
             api.createCar(car).enqueue(new Callback<BaseResponse<ItemDTO>>() {
                 @Override
@@ -138,18 +159,14 @@ public class AddCarActivity extends AppCompatActivity {
         }
     }
 
-    // ======================================
-    // 🔹 Interface
-    // ======================================
     public interface PageFragment {
         boolean validatePage();
+
         void putData(CarDTO car) throws Exception;
     }
 
-    // ======================================
-    // 🔹 Adapter
-    // ======================================
     private static class FormPagerAdapter extends FragmentStateAdapter {
+
         private final List<Fragment> fragments;
 
         public FormPagerAdapter(@NonNull AppCompatActivity fa, List<Fragment> fragments) {
@@ -159,27 +176,29 @@ public class AddCarActivity extends AppCompatActivity {
 
         @NonNull
         @Override
-        public Fragment createFragment(int position) { return fragments.get(position); }
+        public Fragment createFragment(int position) {
+            return fragments.get(position);
+        }
 
         @Override
-        public int getItemCount() { return fragments.size(); }
+        public int getItemCount() {
+            return fragments.size();
+        }
 
-        public Fragment getFragmentAt(int pos) { return fragments.get(pos); }
+        public Fragment getFragmentAt(int pos) {
+            return fragments.get(pos);
+        }
     }
 
-    // ==========================================================
-    // 🔹 Fragment 1: Thông tin xe
-    // ==========================================================
     public static class CarInfoFragment extends Fragment implements PageFragment {
-        public TextInputEditText etPlate, etKms;
-        private android.widget.Spinner spBrand , spYear, spSeat, spFuel;
-        private android.widget.RadioGroup rgTransmission;
+
+        private TextInputEditText etPlate, etKms, carName, address;
+        private Spinner spBrand, spYear, spSeat, spFuel;
+        private RadioGroup rgTransmission;
 
         @Nullable
         @Override
-        public android.view.View onCreateView(@NonNull android.view.LayoutInflater inflater,
-                                              @Nullable android.view.ViewGroup container,
-                                              @Nullable Bundle savedInstanceState) {
+        public android.view.View onCreateView(@NonNull android.view.LayoutInflater inflater, @Nullable android.view.ViewGroup container, @Nullable Bundle savedInstanceState) {
             return inflater.inflate(R.layout.fragment_car_info, container, false);
         }
 
@@ -188,7 +207,8 @@ public class AddCarActivity extends AppCompatActivity {
             etPlate = v.findViewById(R.id.et_plate);
             etKms = v.findViewById(R.id.et_kms);
             spBrand = v.findViewById(R.id.spinner_brand);
-         carName = v.findViewById(R.id.car_name);
+            carName = v.findViewById(R.id.car_name);
+            address = v.findViewById(R.id.et_address);
             spYear = v.findViewById(R.id.spinner_year);
             spSeat = v.findViewById(R.id.spinner_seat);
             spFuel = v.findViewById(R.id.spinner_fuel);
@@ -197,55 +217,75 @@ public class AddCarActivity extends AppCompatActivity {
             String[] brands = {"TOYOTA", "HONDA", "MAZDA"};
             spBrand.setAdapter(new android.widget.ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, brands));
 
-
-
-            int curr = Calendar.getInstance().get(Calendar.YEAR);
+            int currYear = Calendar.getInstance().get(Calendar.YEAR);
             List<String> years = new ArrayList<>();
-            for (int y = curr; y >= 1980; y--) years.add(String.valueOf(y));
+            for (int y = currYear; y >= 1980; y--) years.add(String.valueOf(y));
             spYear.setAdapter(new android.widget.ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, years));
 
             String[] seats = {"2", "4", "5", "7"};
             spSeat.setAdapter(new android.widget.ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, seats));
 
-            String[] fuels = {"GASOLINE", "DIESEL", "ELECTRIC"};
+            String[] fuels = {"PETROL", "DIESEL", "ELECTRIC"};
             spFuel.setAdapter(new android.widget.ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, fuels));
         }
 
         @Override
         public boolean validatePage() {
-            return etPlate.getText() != null && !etPlate.getText().toString().trim().isEmpty();
+            try {
+                if (etPlate.getText() == null || etPlate.getText().toString().trim().isEmpty()) return false;
+                if (carName.getText() == null || carName.getText().toString().trim().isEmpty()) return false;
+                if (address.getText() == null || address.getText().toString().trim().isEmpty()) return false;
+
+                String kmsStr = etKms.getText() == null ? "" : etKms.getText().toString().trim();
+                if (kmsStr.isEmpty()) return false;
+                Integer.parseInt(kmsStr);
+
+                if (spBrand.getSelectedItem() == null) return false;
+                if (spYear.getSelectedItem() == null) return false;
+                if (spSeat.getSelectedItem() == null) return false;
+                if (spFuel.getSelectedItem() == null) return false;
+
+                int checked = rgTransmission.getCheckedRadioButtonId();
+                if (checked != R.id.rb_auto && checked != R.id.rb_manual) return false;
+
+            } catch (NumberFormatException e) {
+                return false;
+            }
+            return true;
         }
 
         @Override
         public void putData(CarDTO car) throws Exception {
             car.setLicensePlate(etPlate.getText().toString().trim());
             car.setBrand(spBrand.getSelectedItem().toString());
-
             car.setFuelType(FuelType.valueOf(spFuel.getSelectedItem().toString()));
             car.setSeats(Integer.parseInt(spSeat.getSelectedItem().toString()));
             car.setYear(Integer.parseInt(spYear.getSelectedItem().toString()));
-            car.setKms(Integer.parseInt(etKms.getText().toString().trim()));
+            try {
+                car.setKms(Integer.parseInt(etKms.getText().toString().trim()));
+            } catch (NumberFormatException e) {
+                throw new Exception("Số km không hợp lệ");
+            }
 
             int checked = rgTransmission.getCheckedRadioButtonId();
-            if (checked == R.id.rb_auto)
-                car.setTransmission(Transmission.AUTOMATIC);
-            else if (checked == R.id.rb_manual)
-                car.setTransmission(Transmission.MANUAL);
+            if (checked == R.id.rb_auto) car.setTransmission(Transmission.AUTOMATIC);
+            else if (checked == R.id.rb_manual) car.setTransmission(Transmission.MANUAL);
+            else throw new Exception("Chưa chọn kiểu hộp số");
+
+            if (car.getItem() == null) car.setItem(new ItemDTO());
+            car.getItem().setName(carName.getText().toString().trim());
+            car.getItem().setAddress(address.getText().toString().trim());
         }
     }
 
-    // ==========================================================
-    // 🔹 Fragment 2: Ảnh xe (nhập URL + preview tự động)
-    // ==========================================================
     public static class CarImagesFragment extends Fragment implements PageFragment {
+
         private TextInputEditText etUrl1, etUrl2, etUrl3, etUrl4;
         private ImageView ivUrl1, ivUrl2, ivUrl3, ivUrl4;
 
         @Nullable
         @Override
-        public android.view.View onCreateView(@NonNull android.view.LayoutInflater inflater,
-                                              @Nullable android.view.ViewGroup container,
-                                              @Nullable Bundle savedInstanceState) {
+        public android.view.View onCreateView(@NonNull android.view.LayoutInflater inflater, @Nullable android.view.ViewGroup container, @Nullable Bundle savedInstanceState) {
             return inflater.inflate(R.layout.fragment_car_images, container, false);
         }
 
@@ -282,13 +322,22 @@ public class AddCarActivity extends AppCompatActivity {
                         iv.setImageResource(android.R.drawable.ic_menu_camera);
                     }
                 }
-                @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-                @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
             });
         }
 
         @Override
-        public boolean validatePage() { return true; }
+        public boolean validatePage() {
+            // Không bắt buộc nhập ảnh
+            return true;
+        }
 
         @Override
         public void putData(CarDTO car) {
@@ -302,44 +351,72 @@ public class AddCarActivity extends AppCompatActivity {
 
         private void addUrl(List<ItemImageDTO> imgs, TextInputEditText et) {
             if (et != null && et.getText() != null && !et.getText().toString().trim().isEmpty()) {
-                imgs.add(new ItemImageDTO(null, et.getText().toString().trim(), null));
+                ItemImageDTO itemImageDTO = new ItemImageDTO();
+                itemImageDTO.setImageUrl(et.getText().toString().trim());
+                imgs.add(itemImageDTO);
             }
         }
     }
 
-
-
-    // 🔹 Fragment 4: Giá thuê
-    // ==========================================================
     public static class CarPriceFragment extends Fragment implements PageFragment {
-        private TextInputEditText etPrice;
+
+        private TextInputEditText etPrice, etDeposit;
+        private Switch switchNegotiable;
 
         @Nullable
         @Override
-        public android.view.View onCreateView(@NonNull android.view.LayoutInflater inflater,
-                                              @Nullable android.view.ViewGroup container,
-                                              @Nullable Bundle savedInstanceState) {
+        public android.view.View onCreateView(@NonNull android.view.LayoutInflater inflater, @Nullable android.view.ViewGroup container, @Nullable Bundle savedInstanceState) {
             return inflater.inflate(R.layout.fragment_car_price, container, false);
         }
 
         @Override
         public void onViewCreated(@NonNull android.view.View v, @Nullable Bundle savedInstanceState) {
             etPrice = v.findViewById(R.id.et_price_self);
+            etDeposit = v.findViewById(R.id.et_deposit);
+            switchNegotiable = v.findViewById(R.id.switch_negotiable);
         }
 
         @Override
-        public boolean validatePage() { return true; }
+        public boolean validatePage() {
+            if (etPrice.getText() == null || etPrice.getText().toString().trim().isEmpty()) {
+                Toast.makeText(requireContext(), "Vui lòng nhập giá thuê", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            try {
+                Double.parseDouble(etPrice.getText().toString().trim());
+            } catch (NumberFormatException e) {
+                Toast.makeText(requireContext(), "Giá thuê không hợp lệ", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            return true;
+        }
 
         @Override
         public void putData(CarDTO car) throws Exception {
-            ItemDTO itemDTO = new ItemDTO();
-            String p = etPrice.getText() == null ? "" : etPrice.getText().toString().trim();
-            double price = 0.0;
-            try { price = Double.parseDouble(p);
-            itemDTO.setPrice(price);
-            itemDTO.setName(carName.getText().toString());
-            car.setItem(itemDTO);
-            ;} catch (Exception ignored) {}
+            if (car.getItem() == null) {
+                car.setItem(new ItemDTO());
+            }
+
+            String priceStr = etPrice.getText() == null ? "" : etPrice.getText().toString().trim();
+            double price;
+            try {
+                price = Double.parseDouble(priceStr);
+            } catch (NumberFormatException e) {
+                throw new Exception("Giá thuê không hợp lệ");
+            }
+            car.getItem().setPrice(price);
+
+            String depositStr = etDeposit.getText() == null ? "" : etDeposit.getText().toString().trim();
+            double deposit = 0.0;
+            try {
+                if (!depositStr.isEmpty()) deposit = Double.parseDouble(depositStr);
+            } catch (NumberFormatException e) {
+                throw new Exception("Tiền đặt cọc không hợp lệ");
+            }
+            car.getItem().setDepositAmount(deposit);
+
+            // Nếu cần dùng switchNegotiable thì xử lý ở đây
+            // car.getItem().setNegotiable(switchNegotiable.isChecked());
         }
     }
 }

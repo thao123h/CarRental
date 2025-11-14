@@ -82,7 +82,7 @@ public class ItemDTO {
     private String address;
     private AvailabilityStatus availabilityStatus;
 
-    private Category category;
+    private Category category = Category.CAR;
 
     private List<ItemImageDTO> itemImages;
 

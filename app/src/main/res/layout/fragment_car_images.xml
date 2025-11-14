@@ -78,7 +78,7 @@
                             android:scaleType="centerCrop"
                             android:background="@drawable/rounded_card"
                             android:src="@android:drawable/ic_menu_camera"
-                            android:tint="@color/light_grey"/>
+                            app:tint="@color/light_grey" />
                     </LinearLayout>
 
                     <!-- Ô 2 -->
@@ -106,7 +106,7 @@
                             android:scaleType="centerCrop"
                             android:background="@drawable/rounded_card"
                             android:src="@android:drawable/ic_menu_camera"
-                            android:tint="@color/light_grey"/>
+                            app:tint="@color/light_grey" />
                     </LinearLayout>
 
                     <!-- Ô 3 -->
@@ -134,7 +134,7 @@
                             android:scaleType="centerCrop"
                             android:background="@drawable/rounded_card"
                             android:src="@android:drawable/ic_menu_camera"
-                            android:tint="@color/light_grey"/>
+                            app:tint="@color/light_grey" />
                     </LinearLayout>
 
                     <!-- Ô 4 -->
@@ -162,7 +162,7 @@
                             android:scaleType="centerCrop"
                             android:background="@drawable/rounded_card"
                             android:src="@android:drawable/ic_menu_camera"
-                            android:tint="@color/light_grey"/>
+                            app:tint="@color/light_grey" />
                     </LinearLayout>
                 </GridLayout>
             </LinearLayout>

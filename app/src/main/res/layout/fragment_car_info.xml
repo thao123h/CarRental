@@ -86,14 +86,36 @@
                         android:textColor="@color/text_secondary"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_marginTop="12dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Địa chỉ *">
 
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_address"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:inputType="text"
+                        android:padding="8dp"/>
+                </com.google.android.material.textfield.TextInputLayout>
                 <!-- Year and seats row -->
                 <LinearLayout
                     android:layout_marginTop="12dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:weightSum="2">
+                    android:weightSum="4"
+                    android:gravity="center_vertical">
+
+                    <!-- Nhãn Năm mua xe -->
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Năm mua xe"
+                        android:textSize="16sp"
+                        android:paddingEnd="8dp" />
 
                     <Spinner
                         android:id="@+id/spinner_year"
@@ -101,12 +123,26 @@
                         android:layout_height="48dp"
                         android:layout_weight="1" />
 
+                    <!-- Khoảng cách -->
+                    <Space
+                        android:layout_width="8dp"
+                        android:layout_height="match_parent" />
+
+                    <!-- Nhãn Số chỗ -->
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Số chỗ"
+                        android:textSize="16sp"
+                        android:paddingEnd="8dp" />
+
                     <Spinner
                         android:id="@+id/spinner_seat"
                         android:layout_width="0dp"
                         android:layout_height="48dp"
-                        android:layout_weight="1"
-                        android:layout_marginStart="8dp"/>
+                        android:layout_weight="1" />
+
                 </LinearLayout>
 
                 <!-- Transmission radio -->
