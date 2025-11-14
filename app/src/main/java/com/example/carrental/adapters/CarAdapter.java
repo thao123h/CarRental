@@ -74,7 +74,17 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
 
         Log.d("Adapter", "Bind xe: " + car.getCarDTO().getBrand() + " " + car.getCarDTO().getModel());
 
-        holder.txtCarName.setText(car.getCarDTO().getBrand() + " " +car.getCarDTO().getModel());
+        ItemDTO item = car.getCarDTO().getItem();
+        String name = null;
+
+        if (item != null) {
+            name = item.getName() != null ? item.getName() : item.getCarDTO().getModel();
+        } else {
+            name = "Unknown"; // hoặc chuỗi mặc định bạn muốn
+        }
+
+        holder.txtCarName.setText(car.getCarDTO().getBrand() + " " + name);
+
         holder.txtCarPrice.setText("Biển số: " + (car.getCarDTO().getLicensePlate() != null ? car.getCarDTO().getLicensePlate() : "?"));
 
         if (car.getCarDTO().getYear() != null) {

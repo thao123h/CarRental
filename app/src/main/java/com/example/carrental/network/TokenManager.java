@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -66,8 +67,19 @@ public class TokenManager {
     public Set<String> getRoles() {
         String rolesString = prefs.getString(ROLES_KEY, "");
         if (rolesString.isEmpty()) return new HashSet<>();
-        return new HashSet<>(Arrays.asList(rolesString.split(",")));
+
+        Set<String> rolesSet = new HashSet<>(Arrays.asList(rolesString.split(",")));
+
+        // Kiểm tra nếu rolesSet chứa cả "RENTER" và "OWNER"
+        if (rolesSet.contains("RENTER") && rolesSet.contains("OWNER")) {
+            // Trả về set chỉ chứa "OWNER"
+            return new HashSet<>(Collections.singleton("OWNER"));
+        }
+
+        // Trả về set bình thường
+        return rolesSet;
     }
+
 
     // ==== Helpers ====
     public boolean isLoggedIn() {
