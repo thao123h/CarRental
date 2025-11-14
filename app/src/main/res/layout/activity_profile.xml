@@ -8,7 +8,6 @@
     android:orientation="vertical"
     tools:context=".activities.ProfileActivity">
 
-    <!-- 1. Thanh Header (Toolbar) -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -50,7 +49,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Card thông tin chính -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -63,7 +61,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Thông tin User trên cùng -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -124,13 +121,11 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <!-- Vạch kẻ -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#F0F0F0" />
 
-            <!-- Danh sách các mục -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -139,27 +134,22 @@
                 android:paddingEnd="16dp"
                 android:paddingBottom="16dp">
 
-                <!-- Mục 1: Giấy phép lái xe -->
                 <include
                     android:id="@+id/itemLicense"
                     layout="@layout/item_profile_row" />
 
-                <!-- Mục 2: Số điện thoại -->
                 <include
                     android:id="@+id/itemPhone"
                     layout="@layout/item_profile_row" />
 
-                <!-- Mục 3: Email -->
                 <include
                     android:id="@+id/itemEmail"
                     layout="@layout/item_profile_row" />
 
-                <!-- Mục 4: Facebook -->
                 <include
-                    android:id="@+id/itemFacebook"
+                    android:id="@+id/cccd"
                     layout="@layout/item_profile_row" />
 
-                <!-- Mục 5: Google -->
                 <include
                     android:id="@+id/itemGoogle"
                     layout="@layout/item_profile_row" />
@@ -170,7 +160,6 @@
 
     </androidx.cardview.widget.CardView>
 
-    <!-- Nút Đăng xuất (Thêm vào) -->
     <Button
         android:id="@+id/btnLogout"
         android:layout_width="match_parent"
